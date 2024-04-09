@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="login">
+          <form action="" name="CadastroLogin" onsubmit="return validation()">
+            <p id="resultado"></p>
+    
+            <h2>Login</h2>
+    
+            <div class="entrada-login">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" name="Email" placeholder="Email">
+            </div>
+    
+            <div class="entrada-login">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" name="Senha" placeholder="Senha">
+            </div>
+    
+            <div class="botao">
+              <input type="submit" class="btn" onclick="validation()" value="Login">
+            </div>
+    
+            <div class="adicionais">
+              <span><a href="#">Esqueceu a senha ?</a></span>
+              <span><a href="#">Login</a></span>
+            </div>
+          </form>
+        </div>
+
+</body>
+</html>

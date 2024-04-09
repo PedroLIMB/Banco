@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <img src="LOGO DIP.png" alt="Logo Banco DIP">
+        Banco DIP
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+          <li><a href="#"></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="login-container">
+      <div class="login">
+        <form action="" name="CadastroLogin" onsubmit="return validation()">
+          <p id="resultado"></p>
+
+          <h2>Registro</h2>
+          <div class="entrada-login">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="Nome" placeholder="Usuário">
+          </div>
+
+          <div class="entrada-login">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" name="Email" placeholder="Email">
+          </div>
+
+          <div class="entrada-login">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="Senha" placeholder="Senha">
+          </div>
+
+          <div class="entrada-login">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="cSenha" placeholder="Confirmar senha">
+          </div>
+
+          <div class="botao">
+            <input type="submit" class="btn" onclick="validation()" value="Registro">
+          </div>
+
+          <div class="adicionais">
+            <span><a href="#">Esqueceu a senha ?</a></span>
+            <span><a href="#">Login</a></span>
+          </div>
+        </form>
+      </div>
+
+      <div class="loginConfirmado" id="loginConfirmado">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <h2>Obrigado!</h2>
+        <p>Você foi registrado com sucesso. Obrigado!</p>
+        <a href="login.html"><button onclick="CloseSlide()">OK</button></a>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
