@@ -5,42 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_type01"
-    tools:context=".view.RegisterActivity">
+    tools:context=".view.LoginActivity">
 
     <TextView
-        android:id="@+id/txt_register_main"
+        android:id="@+id/txt_login_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:fontFamily="@font/ubuntu_medium"
+        android:layout_marginTop="50dp"
+
         android:text="@string/app_name"
-        android:textAllCaps="true"
         android:textColor="@color/white"
+        android:fontFamily="@font/roboto_medium"
+        android:textAllCaps="true"
         android:textSize="50sp"
-        android:textStyle="bold"
 
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
         />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
         android:orientation="vertical"
+        android:layout_width="350dp"
+        android:layout_height="450dp"
         android:gravity="center"
 
-        app:layout_constraintTop_toBottomOf="@id/txt_register_main"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_login_main"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/txt_dados"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -49,11 +47,10 @@
             android:fontFamily="@font/roboto_medium"
             android:textSize="30sp"
 
-
             />
 
         <EditText
-            android:id="@+id/hint_txt_register_nome"
+            android:id="@+id/hint_txt_nome_login"
             android:layout_width="250dp"
             android:layout_height="50dp"
 
@@ -72,7 +69,7 @@
             />
 
         <EditText
-            android:id="@+id/hint_txt_register_email"
+            android:id="@+id/hint_txt_login_email"
             android:layout_width="250dp"
             android:layout_height="50dp"
 
@@ -90,27 +87,8 @@
 
             />
 
-        <EditText
-            android:id="@+id/hint_txt_register_saldo"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-
-            android:layout_marginTop="20dp"
-
-            android:background="@drawable/edit_text_background"
-
-            android:padding="10dp"
-            android:textColorHint="@color/blue_type05"
-            android:fontFamily="@font/roboto_medium"
-            android:autofillHints="null"
-
-            android:hint="@string/hint_saldo"
-            android:inputType="number|numberDecimal"
-
-            />
-
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_criar_conta"
+            android:id="@+id/btn_entrar_conta"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
 
@@ -118,19 +96,29 @@
 
             android:layout_marginTop="50dp"
 
+            android:text="@string/txt_entrar"
+            android:textColor="@color/blue_type01"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_login_criar_conta"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/btn_background"
+
+            android:layout_marginTop="20dp"
+
             android:text="@string/btn_txt_criar_conta"
             android:textColor="@color/blue_type01"
 
             />
 
+
+
+
     </LinearLayout>
-
-
-
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
