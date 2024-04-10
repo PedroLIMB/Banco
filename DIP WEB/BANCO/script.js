@@ -1,62 +1,72 @@
-// Função de depósito
-document.getElementById('botaoDeposito').addEventListener('click', function() {
-    var valor = parseFloat(document.getElementById('valorTransacao').value);
-    if (!isNaN(valor) && valor > 0) {
-      animarBotao(this);
-      atualizarSaldo(valor);
-      mostrarMensagemResultado('Depósito realizado com sucesso!');
-    } else {
-      mostrarMensagemResultado('Por favor, digite um valor válido.');
-    }
-  });
-  
-  // Função de saque
-  document.getElementById('botaoSaque').addEventListener('click', function() {
-    var valor = parseFloat(document.getElementById('valorTransacao').value);
-    if (!isNaN(valor) && valor > 0) {
-      animarBotao(this);
-      atualizarSaldo(-valor);
-      mostrarMensagemResultado('Saque realizado com sucesso!');
-    } else {
-      mostrarMensagemResultado('Por favor, digite um valor válido.');
-    }
-  });
-  
-  // Função de transferência
-  document.getElementById('botaoTransferencia').addEventListener('click', function() {
-    var valor = parseFloat(document.getElementById('valorTransacao').value);
-    if (!isNaN(valor) && valor > 0) {
-      animarBotao(this);
-      atualizarSaldo(-valor);
-      mostrarMensagemResultado('Transferência realizada com sucesso!');
-    } else {
-      mostrarMensagemResultado('Por favor, digite um valor válido.');
-    }
-  });
-  
-  // Animação do botão
-  function animarBotao(botao) {
-    botao.classList.add('clicado');
-    setTimeout(function() {
-      botao.classList.remove('clicado');
-    }, 300);
-  }
-  
-  // Atualizar saldo
+document.addEventListener("DOMContentLoaded", function() {
+  const saldoElement = document.getElementById("saldo");
+  const valorTransacaoInput = document.getElementById("valorTransacao");
+  const resultadoElement = document.getElementById("resultado");
+  const limiteChequeEspecial = 500; // Defina o limite do cheque especial aqui
+
+  // Função para atualizar o saldo
   function atualizarSaldo(valor) {
-    var elementoSaldo = document.getElementById('saldo');
-    var saldoAtual = parseFloat(elementoSaldo.innerText.replace('R$', ''));
-    var novoSaldo = saldoAtual + valor;
-    elementoSaldo.innerText = 'R$' + novoSaldo.toFixed(2);
+    saldoElement.textContent = `R$${valor.toFixed(2)}`;
   }
-  
-  // Mostrar mensagem de resultado
-  function mostrarMensagemResultado(mensagem) {
-    var elementoResultado = document.getElementById('resultado');
-    elementoResultado.innerText = mensagem;
-    elementoResultado.classList.add('exibir');
-    setTimeout(function() {
-      elementoResultado.classList.remove('exibir');
-    }, 2000);
+
+  // Função para exibir mensagem de resultado
+  function exibirResultado(mensagem) {
+    resultadoElement.textContent = mensagem;
   }
-  
+
+  // Função para executar uma transação
+  function executarTransacao(valor, tipo) {
+    const valorTransacao = parseFloat(valor);
+    if (isNaN(valorTransacao) || valorTransacao <= 0) {
+      exibirResultado("Por favor, digite um valor válido.");
+      return;
+    }
+
+    let saldoAtual = parseFloat(saldoElement.textContent.replace("R$", ""));
+    let novoSaldo;
+
+    switch (tipo) {
+      case "Depósito":
+        novoSaldo = saldoAtual + valorTransacao;
+        exibirResultado(`Depósito de R$${valorTransacao.toFixed(2)} realizado com sucesso.`);
+        break;
+      case "Saque":
+        if (valorTransacao > saldoAtual + limiteChequeEspecial) {
+          exibirResultado("Saldo e limite de cheque especial insuficientes para realizar o saque.");
+          return;
+        }
+        novoSaldo = saldoAtual - valorTransacao;
+        exibirResultado(`Saque de R$${valorTransacao.toFixed(2)} realizado com sucesso.`);
+        break;
+      case "Transferência":
+        if (valorTransacao > saldoAtual + limiteChequeEspecial) {
+          exibirResultado("Saldo e limite de cheque especial insuficientes para realizar a transferência.");
+          return;
+        }
+        novoSaldo = saldoAtual - valorTransacao;
+        exibirResultado(`Transferência de R$${valorTransacao.toFixed(2)} realizada com sucesso.`);
+        break;
+      default:
+        exibirResultado("Tipo de transação inválido.");
+        return;
+    }
+
+    atualizarSaldo(novoSaldo);
+  }
+
+  // Adicionando evento de clique aos botões de transação
+  document.getElementById("botaoDeposito").addEventListener("click", function() {
+    const valor = valorTransacaoInput.value;
+    executarTransacao(valor, "Depósito");
+  });
+
+  document.getElementById("botaoSaque").addEventListener("click", function() {
+    const valor = valorTransacaoInput.value;
+    executarTransacao(valor, "Saque");
+  });
+
+  document.getElementById("botaoTransferencia").addEventListener("click", function() {
+    const valor = valorTransacaoInput.value;
+    executarTransacao(valor, "Transferência");
+  });
+});
