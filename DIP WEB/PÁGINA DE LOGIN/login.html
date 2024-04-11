@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="Logo DIP.ico">
+    <link rel="stylesheet" href="login.css">
+    <title>Login</title>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+
+      <div class="logo">
+        <a href="../BANCO/index.html">
+        <img src="LOGO DIP.png" alt="Logo Banco DIP">
+        Banco DIP
+        </a>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Serviços</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+
+        <div class="menu-br">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+
+      </nav>
+    </div>
+  </header>
+    
+    <div class="login-container">
+        <div class="login">
+          <form action="" name="CadastroLogin" onsubmit="return validation()">
+            <p id="resultado"></p>
+    
+            <h2>Login</h2>
+    
+            <div class="entrada-login">
+              <input type="email" name="Email" placeholder="Email">
+            </div>
+    
+            <div class="entrada-login">
+              <input type="password" name="Senha" placeholder="Senha">
+            </div>
+    
+            <div class="botao">
+              <a href="../BANCO/index.html" class="btn-link">
+                  <input type="button" class="btn" onclick="validation()" value="Login">
+              </a>
+            </div>
+    
+            <div class="adicionais">
+              <span><a href="#">Esqueceu a senha ?</a></span>
+              <span><a href="cadastro.html">Inscreva-se</a></span>
+            </div>
+          </form>
+        </div>
+
+        <script src="script-header.js"></script>
+
+</body>
+</html>

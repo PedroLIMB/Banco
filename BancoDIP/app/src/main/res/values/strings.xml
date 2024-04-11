@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Banco DIP</string>
+    <string name="txt_dados">Insira seus dados</string>
+    <string name="hint_name">Nome</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_saldo">Saldo</string>
+    <string name="btn_txt_criar_conta">Criar Conta</string>
+    <string name="txt_entrar">Entrar</string>
+    <string name="txt_boas_vindas">Olá,</string>
+    <string name="txt_name_placeholder">nome</string>
 
 
 </resources>
