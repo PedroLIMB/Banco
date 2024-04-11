@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="Logo DIP.ico">
     <link rel="stylesheet" href="login.css">
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <body>
-    
+
+  <header class="header">
     <div class="container">
+      <div class="logo">
+        <img src="LOGO DIP.png" alt="Logo Banco DIP">
+        Banco DIP
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Serviços</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Ajuda</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+    
+    <div class="login-container">
         <div class="login">
           <form action="" name="CadastroLogin" onsubmit="return validation()">
             <p id="resultado"></p>
@@ -26,12 +45,14 @@
             </div>
     
             <div class="botao">
-              <input type="submit" class="btn" onclick="validation()" value="Login">
+              <a href="../BANCO/index.html" class="btn-link">
+                  <input type="button" class="btn" onclick="validation()" value="Login">
+              </a>
             </div>
     
             <div class="adicionais">
               <span><a href="#">Esqueceu a senha ?</a></span>
-              <span><a href="#">Login</a></span>
+              <span><a href="cadastro.html">Inscreva-se</a></span>
             </div>
           </form>
         </div>
