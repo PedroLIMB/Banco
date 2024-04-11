@@ -1,6 +1,10 @@
 import mysql.connector
-import tkinter
+from tkinter import *
 import customtkinter
+from PIL import Image
+#Bibliotecas necessarias para o codigo rodar
+#pip install pillow
+#pip install customtkinter
 
 bd = mysql.connector.connect(
     host="localhost",
@@ -28,27 +32,48 @@ def criar_tabela():
                   saldo DECIMAL(7,2) NOT NULL)'''.format(nome_tabela)
     cursor.execute(tabela)
     bd.commit()
-
-#Arrumar design
-class Inteface():
-
-    janela = customtkinter.CTk()
-    janela.geometry("700x350")
-
-    nomebanco = customtkinter.CTkLabel(janela, text="Banco DPI")
-    nomebanco.pack(padx=10, pady=10)
-    nomebanco.configure(font=("Roboto", 20, "bold"))
-
-    usuario = customtkinter.CTkEntry(janela, placeholder_text="Usuario")
-    usuario.pack(padx=10, pady=10)
     
+
+class Interface():
+
+    #Criar janela
+    janela = customtkinter.CTk()
+    janela.geometry("700x400")
+    janela.title("BancoDIP")
+    
+    #Adicão elementos
+    nomebanco = customtkinter.CTkLabel(janela, text="Banco DIP")
+    usuario = customtkinter.CTkEntry(janela, placeholder_text="Usuario")
     email = customtkinter.CTkEntry(janela, placeholder_text="Email")
-    email.pack(padx=10, pady=10)
-
     senha = customtkinter.CTkEntry(janela, placeholder_text="Senha", show="*")
-    senha.pack(padx=10, pady=10)
-
     confirmarsenha = customtkinter.CTkEntry(janela, placeholder_text="Confirmar Senha", show="*")
-    confirmarsenha.pack(padx=10, pady=10)
+    cadastrar = customtkinter.CTkButton(janela, text="Cadastrar")
+    login = customtkinter.CTkLabel(janela, text="Login")
+
+    #Customização janela no geral
+    customtkinter.set_appearance_mode('Light')
+    esquerdo = customtkinter.CTkFrame(master = janela, width=340, height=400, fg_color="#192042").place(x=-10, y=0)
+
+    #Customização dos elementos
+    nomebanco.place(x=465, y=35)
+    nomebanco.configure(font=("Roboto", 22, "bold"))
+
+    usuario.place(x=370, y=90)
+    usuario.configure(font=("Roboto", 16), width=300, height=45, border_width=0)
+
+    email.place(x=370, y=140)
+    email.configure(font=("Roboto", 16), width=300, height=45, border_width=0)
+
+    senha.place(x=370, y=190)
+    senha.configure(font=("Roboto", 16), width=300, height=45, border_width=0)
+
+    confirmarsenha.place(x=370, y=240)
+    confirmarsenha.configure(font=("Roboto", 16), width=300, height=45, border_width=0)
+
+    cadastrar.place(x=370, y=290)
+    cadastrar.configure(font=("Roboto", 16), width=300, height=45, fg_color="#192042")
+
+    login.place(x=370, y=340)
+    login.configure(font=("Roboto", 16), width=300, height=45)
 
     janela.mainloop()
