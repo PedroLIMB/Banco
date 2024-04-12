@@ -2,9 +2,7 @@ import mysql.connector
 from tkinter import *
 import customtkinter
 from PIL import Image
-#Bibliotecas necessarias para o codigo rodar
-#pip install pillow
-#pip install customtkinter
+import os
 
 bd = mysql.connector.connect(
     host="localhost",
@@ -32,16 +30,25 @@ def criar_tabela():
                   saldo DECIMAL(7,2) NOT NULL)'''.format(nome_tabela)
     cursor.execute(tabela)
     bd.commit()
-    
 
 class Interface():
 
-    #Criar janela
+    # Criar janela
     janela = customtkinter.CTk()
     janela.geometry("700x400")
     janela.title("BancoDIP")
+
+    # Customizando janela no geral
+    customtkinter.set_appearance_mode('Light')
+    esquerdo = customtkinter.CTkFrame(master=janela, width=340, height=400, fg_color="#192042")
+    esquerdo.place(x=-10, y=0)
+
+    # Adição elementos
+    logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
+    imagem = customtkinter.CTkImage(light_image=Image.open(logo))
+    label_logo = customtkinter.CTkLabel(master=esquerdo, image=imagem, text="")
     
-    #Adicão elementos
+
     nomebanco = customtkinter.CTkLabel(janela, text="Banco DIP")
     usuario = customtkinter.CTkEntry(janela, placeholder_text="Usuario")
     email = customtkinter.CTkEntry(janela, placeholder_text="Email")
@@ -50,11 +57,10 @@ class Interface():
     cadastrar = customtkinter.CTkButton(janela, text="Cadastrar")
     login = customtkinter.CTkLabel(janela, text="Login")
 
-    #Customização janela no geral
-    customtkinter.set_appearance_mode('Light')
-    esquerdo = customtkinter.CTkFrame(master = janela, width=340, height=400, fg_color="#192042").place(x=-10, y=0)
+    # Customização dos elementos
+    label_logo.place(x=-87, y=-45)
+    imagem.configure(size=(500, 500))
 
-    #Customização dos elementos
     nomebanco.place(x=465, y=35)
     nomebanco.configure(font=("Roboto", 22, "bold"))
 
