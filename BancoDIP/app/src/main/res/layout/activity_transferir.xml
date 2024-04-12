@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/blue_type01"
+    tools:context=".view.TransferirActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="50dp"
+
+        android:text="@string/txt_transferencias"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textAllCaps="true"
+        android:fontFamily="@font/roboto_medium"
+
+
+        />
+
+    <EditText
+        android:id="@+id/trans_user_email"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+
+        android:background="@drawable/edit_text_background"
+
+        android:layout_marginBottom="20dp"
+
+        android:hint="@string/hint_email"
+        android:textColorHint="@color/white"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="10dp"
+
+        />
+
+    <EditText
+        android:id="@+id/trans_user_valor"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+
+        android:background="@drawable/edit_text_background"
+
+        android:layout_marginBottom="20dp"
+
+        android:hint="@string/hint_txt_inserir_valor"
+        android:textColorHint="@color/white"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="10dp"
+
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_Transferir_user"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/btn_background"
+
+        android:layout_marginBottom="20dp"
+
+        android:text="@string/txt_transferir"
+        android:fontFamily="@font/roboto_medium"
+
+
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_voltar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/btn_background"
+
+        android:text="@string/btn_txt_voltar"
+        android:fontFamily="@font/roboto_medium"
+
+
+        />
+
+
+
+
+
+</LinearLayout>
