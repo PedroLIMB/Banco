@@ -36,7 +36,7 @@ def criar_tabela():
 
 class Interface():
 
-    def tela_login():
+    def janela_login():
         #Criando janela de login
         janela_login = customtkinter.CTkToplevel()
         janela_login.geometry("700x400")
@@ -74,6 +74,48 @@ class Interface():
 
         cadastrar.place(x=40, y=290)
         cadastrar.configure(font=("Roboto", 14), width=300, height=38, fg_color="#192042")
+
+#===================================================================================================#
+
+    def janela_principal():
+        #Criando janela de login
+        janela_principal = customtkinter.CTkToplevel()
+        janela_principal.geometry("1000x750")
+        janela_principal.title("BancoDIP")
+        
+        #Customizando janela no geral
+        header = customtkinter.CTkFrame(master=janela_principal, width=1000, height=200, fg_color="#192042")
+        header.place(x=0, y=0)
+        frame_saque = customtkinter.CTkFrame(master=janela_principal, width=300, height=400, fg_color="#192042")
+        frame_saque.place(x=25, y=300)
+        frame_deposito = customtkinter.CTkFrame(master=janela_principal, width=300, height=400, fg_color="#192042")
+        frame_deposito.place(x=350, y=300)
+        frame_transferencia = customtkinter.CTkFrame(master=janela_principal, width=300, height=400, fg_color="#192042")
+        frame_transferencia.place(x=675, y=300)
+        
+        #Adição de elementos
+        logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
+        imagem = customtkinter.CTkImage(light_image=Image.open(logo))
+        label_logo = customtkinter.CTkLabel(master=header, image=imagem, text="")
+        titulo_saque = customtkinter.CTkLabel(master=frame_saque, text="Saque")
+        texto_saque = customtkinter.CTkLabel(master=frame_saque, text="Informe um valor para sacar:")
+        entry_saque = customtkinter.CTkEntry(master=frame_saque, placeholder_text="Valor")
+        
+        #Customização dos elementos
+        label_logo.place(x=350, y=-50)
+        imagem.configure(size=(300, 300))
+        titulo_saque.configure(font=("Roboto", 28), text_color="white")
+        titulo_saque.place(x=115, y=30)
+
+        texto_saque.configure(font=("Roboto", 18), text_color="white")
+        texto_saque.place(x=35, y=90)
+
+        entry_saque.configure(font=("Roboto", 18))
+        entry_saque.place(x=35, y=170)
+
+
+
+#===================================================================================================#
     
     # Criar janela
     janela = customtkinter.CTk()
@@ -95,8 +137,8 @@ class Interface():
     senha = customtkinter.CTkEntry(janela, placeholder_text="Senha", show="*")
     confirmarsenha = customtkinter.CTkEntry(janela, placeholder_text="Confirmar Senha", show="*")
     saldoinicial = customtkinter.CTkEntry(janela, placeholder_text="Insira um saldo inicial")
-    cadastrar = customtkinter.CTkButton(janela, text="Registrar-se")
-    login = customtkinter.CTkButton(janela, text="Fazer Login", command=tela_login)
+    cadastrar = customtkinter.CTkButton(janela, text="Registrar-se", command=janela_principal)
+    login = customtkinter.CTkButton(janela, text="Fazer Login", command=janela_login)
 
     # Customização dos elementos
     label_logo.place(x=-87, y=-45)
