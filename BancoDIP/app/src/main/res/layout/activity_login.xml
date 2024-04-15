@@ -69,7 +69,7 @@
             />
 
         <EditText
-            android:id="@+id/hint_txt_login_email"
+            android:id="@+id/hint_txt_email"
             android:layout_width="250dp"
             android:layout_height="50dp"
 
@@ -80,10 +80,9 @@
             android:padding="10dp"
             android:textColorHint="@color/blue_type05"
             android:fontFamily="@font/roboto_medium"
-            android:autofillHints="emailAddress"
+            android:autofillHints="null"
 
             android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
 
             />
 
@@ -102,7 +101,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_login_criar_conta"
+            android:id="@+id/btn_criar_conta_login"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
 
@@ -114,7 +113,6 @@
             android:textColor="@color/blue_type01"
 
             />
-
 
 
 

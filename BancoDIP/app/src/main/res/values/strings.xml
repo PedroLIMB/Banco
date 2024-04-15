@@ -8,6 +8,13 @@
     <string name="txt_entrar">Entrar</string>
     <string name="txt_boas_vindas">Olá,</string>
     <string name="txt_name_placeholder">nome</string>
+    <string name="txt_conta">Conta</string>
+    <string name="txt_saldo_conta_main">R$ 0.00</string>
+    <string name="txt_depositar">Depositar</string>
+    <string name="hint_txt_inserir_valor">Insira um valor desejado</string>
+    <string name="txt_transferir">Transferir</string>
+    <string name="btn_txt_voltar">Voltar</string>
+    <string name="txt_transferencias">transferências</string>
 
 
 </resources>
