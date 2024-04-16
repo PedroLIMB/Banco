@@ -62,6 +62,9 @@
             android:textColorHint="@color/blue_type05"
             android:fontFamily="@font/roboto_medium"
             android:autofillHints="name"
+            android:textColor="@color/white"
+
+
 
             android:hint="@string/hint_name"
             android:inputType="text"
@@ -81,6 +84,7 @@
             android:textColorHint="@color/blue_type05"
             android:fontFamily="@font/roboto_medium"
             android:autofillHints="null"
+            android:textColor="@color/white"
 
             android:hint="@string/hint_email"
 

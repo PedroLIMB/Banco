@@ -15,6 +15,7 @@
     <string name="txt_transferir">Transferir</string>
     <string name="btn_txt_voltar">Voltar</string>
     <string name="txt_transferencias">transferências</string>
+    <string name="txt_sacar">sacar</string>
 
 
 </resources>

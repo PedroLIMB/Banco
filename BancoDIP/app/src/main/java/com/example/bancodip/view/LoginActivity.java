@@ -24,12 +24,25 @@ public class LoginActivity extends AppCompatActivity {
         Intent intentRegister = new Intent(LoginActivity.this, RegisterActivity.class);
         Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
 
+        controllerBancoDados = new ControllerBancoDados(this);
 
         binding.btnCriarContaLogin.setOnClickListener(v -> {
             startActivity(intentRegister);
         });
 
         binding.btnEntrarConta.setOnClickListener(v -> {
+            controllerBancoDados.open();
+
+            String nome = binding.hintTxtNomeLogin.getText().toString().trim();
+            String email = binding.hintTxtEmail.getText().toString().trim();
+
+
+            if (nome == null){
+
+            }else{
+
+            }
+
 
         });
 

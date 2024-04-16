@@ -111,7 +111,7 @@
         android:background="@drawable/btn_background"
         android:backgroundTint="@color/blue_type01"
 
-        android:text="@string/txt_depositar"
+        android:text="@string/txt_sacar"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:fontFamily="@font/roboto_medium"

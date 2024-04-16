@@ -1,5 +1,6 @@
 package com.example.bancodip.controller;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,7 +29,7 @@ public class ControllerBancoDados {
         dbHelper.close();
     }
 
-    public long insertData(String name, String email, String saldo) {
+    public long insertData(String name, String email, Double saldo) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_TITULAR, name);
         contentValues.put(ModelBancoDados.COLUNA_SALDO, saldo);
@@ -51,6 +52,32 @@ public class ControllerBancoDados {
                 null, null, null, null, null);
     }
 
+    public boolean isEmailInDatabase(String emailToCheck) {
+        Cursor cursor = database.query(
+                ModelBancoDados.NOME_TABELA,
+                new String[]{ModelBancoDados.COLUNA_EMAIL},
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(ModelBancoDados.COLUNA_EMAIL));
+                if (emailToCheck.equals(email)) {
+
+                    cursor.close();
+                    return true;
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return false;
+    }
 
 
 
