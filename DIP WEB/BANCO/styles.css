@@ -177,10 +177,19 @@ body {
 }
 
 /* Footer */
-.footer {
+footer {
   background-color: #324169;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+footer img {
+    width: 100px;
+}
+
+
 
 /* Estilos do prompt */
 .prompt-container {
@@ -322,7 +331,7 @@ body {
     margin-top: 10px;
   }
 
-  .footer {
+  footer {
     display: none;
   }
 }
