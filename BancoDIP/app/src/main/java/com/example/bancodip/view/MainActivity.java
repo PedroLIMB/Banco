@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ControllerBancoDados controllerBancoDados;
-    private ModelBancoDados modelBancoDados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,20 +24,83 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         controllerBancoDados = new ControllerBancoDados(this);
-        modelBancoDados = new ModelBancoDados(this);
 
+        Intent intentTrans = new Intent(MainActivity.this, TransferirActivity.class);
         Intent intent = getIntent();
 
         String nome = intent.getStringExtra("nome");
-        String email = intent.getStringExtra("email");
-        Double saldo = intent.getDoubleExtra("saldo", 0);
 
-        String saldoString = String.valueOf(saldo);
+        try {
+            controllerBancoDados.open();
 
-        binding.userName.setText(nome);
-        binding.saldoConta.setText(saldoString);
+            Double saldoBanco = controllerBancoDados.getSaldoByTitular(nome);
+            String saldoString = String.valueOf(saldoBanco);
+
+            binding.userName.setText(nome);
+            binding.saldoConta.setText(saldoString);
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            controllerBancoDados.close();
+        }
 
 
+
+        binding.btnDepositar.setOnClickListener(v -> {
+            controllerBancoDados.open();
+
+            String valorCliente = binding.hintUserValor.getText().toString();
+
+            if(!valorCliente.isEmpty()){
+                try {
+
+                    Double valorSaldo = controllerBancoDados.getSaldoByTitular(nome);
+                    Double novoSaldo = Double.parseDouble(valorCliente) + valorSaldo ;
+
+                    controllerBancoDados.updateSaldo(nome, String.valueOf(novoSaldo));
+
+                    binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                } finally {
+                    controllerBancoDados.close();
+                    binding.hintUserValor.setText("");
+                }
+            }
+
+        });
+
+        binding.btnSacar.setOnClickListener(v -> {
+            controllerBancoDados.open();
+
+            String valorCliente = binding.hintUserValor.getText().toString();
+
+            if(!valorCliente.isEmpty()){
+                try {
+
+                    Double valorSaldo = controllerBancoDados.getSaldoByTitular(nome);
+                    Double novoSaldo = valorSaldo - Double.parseDouble(valorCliente) ;
+
+                    controllerBancoDados.updateSaldo(nome, String.valueOf(novoSaldo));
+
+                    binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                } finally {
+                    controllerBancoDados.close();
+                    binding.hintUserValor.setText("");
+                }
+            }
+
+        });
+
+        binding.btnTransferir.setOnClickListener(v -> {
+            startActivity(intentTrans);
+        });
 
     }
 }

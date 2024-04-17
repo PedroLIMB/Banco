@@ -42,7 +42,7 @@
 
                 android:text="@string/txt_name_placeholder"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:fontFamily="@font/roboto_medium" />
 
 
@@ -133,6 +133,9 @@
         android:hint="@string/hint_txt_inserir_valor"
         android:textColorHint="@color/blue_type01"
         android:padding="10dp"
+        android:autofillHints="null"
+        android:inputType="number|numberDecimal"
+        android:maxLines="1"
 
 
         />

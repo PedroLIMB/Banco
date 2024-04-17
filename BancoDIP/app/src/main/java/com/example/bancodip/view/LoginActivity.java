@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.bancodip.R;
 import com.example.bancodip.controller.ControllerBancoDados;
@@ -37,12 +38,21 @@ public class LoginActivity extends AppCompatActivity {
             String email = binding.hintTxtEmail.getText().toString().trim();
 
 
-            if (nome == null){
+            if (controllerBancoDados.isNomeInDatabase(nome) && controllerBancoDados.isEmailInDatabase(email)){
 
-            }else{
+                try {
+                    intentMain.putExtra("nome", nome);
+                    intentMain.putExtra("email", email);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
+                startActivity(intentMain);
+                finish();
+
+            }else {
+                Toast.makeText(getApplicationContext(), "Erro", Toast.LENGTH_LONG).show();
             }
-
 
         });
 

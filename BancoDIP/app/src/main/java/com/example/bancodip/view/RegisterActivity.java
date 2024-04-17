@@ -10,6 +10,8 @@ import com.example.bancodip.R;
 import com.example.bancodip.controller.ControllerBancoDados;
 import com.example.bancodip.databinding.ActivityRegisterBinding;
 
+import java.util.Locale;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
@@ -28,8 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
         binding.btnCriarConta.setOnClickListener(v ->{
             controllerBancoDados.open();
 
-            String nome = binding.hintTxtRegisterNome.getText().toString().trim();
-            String email = binding.hintTxtRegisterEmail.getText().toString().trim();
+            String nome = binding.hintTxtRegisterNome.getText().toString().trim().toUpperCase();
+            String email = binding.hintTxtRegisterEmail.getText().toString().trim().toUpperCase();
             String saldo = binding.hintTxtRegisterSaldo.getText().toString().trim();
 
             if(!nome.isEmpty() && !email.isEmpty() &&!saldo.isEmpty() && !controllerBancoDados.isEmailInDatabase(email)){

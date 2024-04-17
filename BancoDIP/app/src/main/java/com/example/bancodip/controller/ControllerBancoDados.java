@@ -52,21 +52,65 @@ public class ControllerBancoDados {
                 null, null, null, null, null);
     }
 
+    public Double getSaldoByTitular(String titular) {
+        try {
+            Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
+                    new String[]{ModelBancoDados.COLUNA_SALDO},
+                    ModelBancoDados.COLUNA_TITULAR + " = ?",
+                    new String[]{titular},
+                    null, null, null);
+
+            Double saldo = 0.0;
+            if (cursor != null && cursor.moveToFirst()) {
+                int saldoIndex = cursor.getColumnIndex(ModelBancoDados.COLUNA_SALDO);
+                saldo = cursor.getDouble(saldoIndex);
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+            return saldo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0; // ou algum outro valor de erro
+        }
+    }
+
+
+
     public boolean isEmailInDatabase(String emailToCheck) {
         Cursor cursor = database.query(
                 ModelBancoDados.NOME_TABELA,
                 new String[]{ModelBancoDados.COLUNA_EMAIL},
-                null,
-                null,
-                null,
-                null,
-                null
+                null, null, null, null, null
         );
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(ModelBancoDados.COLUNA_EMAIL));
                 if (emailToCheck.equals(email)) {
+
+                    cursor.close();
+                    return true;
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return false;
+    }
+
+    public boolean isNomeInDatabase(String nameToCheck) {
+        Cursor cursor = database.query(
+                ModelBancoDados.NOME_TABELA,
+                new String[]{ModelBancoDados.COLUNA_TITULAR},
+                null, null, null, null, null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String nome = cursor.getString(cursor.getColumnIndex(ModelBancoDados.COLUNA_TITULAR));
+                if (nameToCheck.equals(nome)) {
 
                     cursor.close();
                     return true;
