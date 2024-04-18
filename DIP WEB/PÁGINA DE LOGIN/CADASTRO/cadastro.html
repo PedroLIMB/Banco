@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
-    <link rel="shortcut icon" type="image/png" href="Logo DIP.ico">
+    <link rel="shortcut icon" type="image/png" href="../Logo DIP.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="cadastro.css">
     
@@ -16,8 +16,8 @@
 
     <div class="container">
       <div class="logo">
-        <a href="../BANCO/index.html">
-        <img src="LOGO DIP.png" alt="Logo Banco DIP">
+        <a href="/BANCO/index.html">
+        <img src="../LOGO DIP.png" alt="Logo Banco DIP">
         Banco DIP
         </a>
       </div>
@@ -69,7 +69,7 @@
         </div>
 
           <div class="adicionais">
-            <span><a href="login.html">Login</a></span>
+            <span><a href="../LOGIN/login.html">Login</a></span>
           </div>
         </form>
       </div>
@@ -81,7 +81,7 @@
         <p>Digite o Valor do Depósito Inicial:</p>
         <input type="number" id="valorTransacao" placeholder="Digite o valor...">
         <button id="botaoDeposito">Depósito Inicial</button>
-        <a id="linkOK" href="../BANCO/index.html"><button onclick="CloseSlide()" disabled>OK</button></a>
+        <a id="linkOK" href="/BANCO/index.html"><button onclick="CloseSlide()" disabled>OK</button></a>
       </div>
     </div>
   </main>
@@ -107,7 +107,7 @@
 
       const db = getDatabase(app);
 
-      document.getElementById("registro").addEventListener('click', function(e){
+      document.getElementById("linkOK").addEventListener('click', function(e){
         e.preventDefault()
 
         set(ref(db, 'usuarios/' + document.getElementById("usuario").value),
@@ -123,8 +123,8 @@
 
   </script>
 
-  <script src="script.js"></script>
-  <script src="script-header.js"></script>
+  <script src="cadastro.js"></script>
+  <script src="../script-header.js"></script>
 
 </body>
 </html>
