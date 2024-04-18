@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ControllerBancoDados controllerBancoDados;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -34,10 +33,14 @@ public class MainActivity extends AppCompatActivity {
             controllerBancoDados.open();
 
             Double saldoBanco = controllerBancoDados.getSaldoByTitular(nome);
+            Double chequeBanco = controllerBancoDados.getChequeByTitular(nome);
             String saldoString = String.valueOf(saldoBanco);
+            String chequeString = String.valueOf(chequeBanco);
 
-            binding.userName.setText(nome);
-            binding.saldoConta.setText(saldoString);
+            binding.userName.setText("Olá, " +  nome.toLowerCase());
+            binding.saldoConta.setText("R$ " + saldoString);
+            binding.chequeEspecialConta.setText(chequeString);
+
         } catch (Exception e){
             e.printStackTrace();
         } finally {

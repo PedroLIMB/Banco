@@ -8,21 +8,24 @@ import androidx.annotation.Nullable;
 
 public class ModelBancoDados extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "BancoDip.db";
+    private static final String DATABASE_NAME = "BancoDipss.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String NOME_TABELA = "DadosBancarios";
+    public static final String NOME_TABELA = "BancoDIPs";
     public static final String COLUNA_ID = "id";
     public static final String COLUNA_TITULAR = "titular";
     public static final String COLUNA_EMAIL = "email";
     public static final String COLUNA_SALDO= "saldo";
+    public static final String COLUNA_CHEQUE_ESPECIAL = "ChequeEspecial";
 
     private static final String TABLE_CREATE =
             "CREATE TABLE " + NOME_TABELA + " (" +
                     COLUNA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUNA_TITULAR + " VARCHAR(80), " +
                     COLUNA_EMAIL + " VARCHAR(80), " +
+                    COLUNA_CHEQUE_ESPECIAL + "DECIMAL, " +
                     COLUNA_SALDO + " DECIMAL);";
+
 
 
     public ModelBancoDados(Context context) {

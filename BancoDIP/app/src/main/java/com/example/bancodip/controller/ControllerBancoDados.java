@@ -29,17 +29,26 @@ public class ControllerBancoDados {
         dbHelper.close();
     }
 
-    public long insertData(String name, String email, Double saldo) {
+    public long insertData(String name, String email, Double saldo, Double chequeEspecial) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_TITULAR, name);
         contentValues.put(ModelBancoDados.COLUNA_SALDO, saldo);
         contentValues.put(ModelBancoDados.COLUNA_EMAIL, email);
+        contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL, chequeEspecial);
         return database.insert(ModelBancoDados.NOME_TABELA, null, contentValues);
     }
 
     public int updateSaldo(String titular, String newSaldo) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_SALDO, newSaldo);
+        String whereClause = ModelBancoDados.COLUNA_TITULAR + " = ?";
+        String[] whereArgs = {titular};
+        return database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
+    }
+
+    public int updateCheque(String titular, String newCheque) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL, newCheque);
         String whereClause = ModelBancoDados.COLUNA_TITULAR + " = ?";
         String[] whereArgs = {titular};
         return database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
@@ -69,6 +78,29 @@ public class ControllerBancoDados {
                 cursor.close();
             }
             return saldo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0; // ou algum outro valor de erro
+        }
+    }
+
+    public Double getChequeByTitular(String titular) {
+        try {
+            Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
+                    new String[]{ModelBancoDados.COLUNA_CHEQUE_ESPECIAL},
+                    ModelBancoDados.COLUNA_TITULAR + " = ?",
+                    new String[]{titular},
+                    null, null, null);
+
+            Double cheque = 0.0;
+            if (cursor != null && cursor.moveToFirst()) {
+                int chequeIndex = cursor.getColumnIndex(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL);
+                cheque = cursor.getDouble(chequeIndex);
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+            return cheque;
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0; // ou algum outro valor de erro

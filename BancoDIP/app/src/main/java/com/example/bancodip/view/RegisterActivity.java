@@ -37,12 +37,14 @@ public class RegisterActivity extends AppCompatActivity {
             if(!nome.isEmpty() && !email.isEmpty() &&!saldo.isEmpty() && !controllerBancoDados.isEmailInDatabase(email)){
                 try {
                     Double saldoDouble = Double.parseDouble(saldo);
+                    Double cheque_especial = saldoDouble * 4;
 
-                    controllerBancoDados.insertData(nome, email, saldoDouble);
+                    controllerBancoDados.insertData(nome, email, saldoDouble, 0.0);
 
                     intentRegister.putExtra("nome", nome);
                     intentRegister.putExtra("email", email);
                     intentRegister.putExtra("saldo", saldoDouble);
+                    intentRegister.putExtra("cheque", cheque_especial);
 
                     startActivity(intentRegister);
                     finish();
