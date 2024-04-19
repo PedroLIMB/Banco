@@ -17,47 +17,53 @@ public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding binding;
     private ControllerBancoDados controllerBancoDados;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent intentRegister = new Intent(RegisterActivity.this, MainActivity.class);
-        ControllerBancoDados controllerBancoDados = new ControllerBancoDados(this);
+        controllerBancoDados = new ControllerBancoDados(this);
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 
-        binding.btnCriarConta.setOnClickListener(v ->{
+        binding.btnCriarConta.setOnClickListener(v -> {
             controllerBancoDados.open();
 
-            String nome = binding.hintTxtRegisterNome.getText().toString().trim().toUpperCase();
-            String email = binding.hintTxtRegisterEmail.getText().toString().trim().toUpperCase();
+            String  nome = binding.hintTxtRegisterNome.getText().toString().toUpperCase().trim();
+            String email = binding.hintTxtRegisterEmail.getText().toString().toUpperCase().trim();
             String saldo = binding.hintTxtRegisterSaldo.getText().toString().trim();
 
-            if(!nome.isEmpty() && !email.isEmpty() &&!saldo.isEmpty() && !controllerBancoDados.isEmailInDatabase(email)){
+            if(!nome.isEmpty() && !email.isEmpty() && !saldo.isEmpty() && !controllerBancoDados.isEmailInDatabase(email)){
+
+                double saldoDouble = Double.parseDouble(saldo);
+                double chequeEspecial = saldoDouble * 4;
+
                 try {
-                    Double saldoDouble = Double.parseDouble(saldo);
-                    Double cheque_especial = saldoDouble * 4;
-
-                    controllerBancoDados.insertData(nome, email, saldoDouble, 0.0);
-
-                    intentRegister.putExtra("nome", nome);
-                    intentRegister.putExtra("email", email);
-                    intentRegister.putExtra("saldo", saldoDouble);
-                    intentRegister.putExtra("cheque", cheque_especial);
-
-                    startActivity(intentRegister);
-                    finish();
+                    controllerBancoDados.insertData(nome, email, saldoDouble, chequeEspecial);
+                    intent.putExtra("nome", nome);
+                    intent.putExtra("email", email);
+                    intent.putExtra("saldo", saldoDouble);
+                    intent.putExtra("cheque", chequeEspecial);
 
                 }catch (Exception e){
                     e.printStackTrace();
                 } finally {
                     controllerBancoDados.close();
+                    startActivity(intent);
+                    finish();
                 }
+
             } else {
-                Toast.makeText(getApplicationContext(), "Erro! email repetido ou um dos campos está vazio", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Erro", Toast.LENGTH_LONG).show();
             }
+
+
+
+
+
         });
+
+
 
 
     }

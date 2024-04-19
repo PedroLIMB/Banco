@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.bancodip.model.ModelBancoDados;
 
@@ -29,21 +30,33 @@ public class ControllerBancoDados {
         dbHelper.close();
     }
 
-    public long insertData(String name, String email, Double saldo, Double chequeEspecial) {
+    public long insertData(String name, String email, double saldo, double chequeEspecial) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_TITULAR, name);
-        contentValues.put(ModelBancoDados.COLUNA_SALDO, saldo);
         contentValues.put(ModelBancoDados.COLUNA_EMAIL, email);
+        contentValues.put(ModelBancoDados.COLUNA_SALDO, saldo);
         contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL, chequeEspecial);
-        return database.insert(ModelBancoDados.NOME_TABELA, null, contentValues);
+
+        long result = -1; // Inicializa o resultado como -1, indicando falha na inserção
+
+        try {
+            result = database.insertOrThrow(ModelBancoDados.NOME_TABELA, null, contentValues);
+            Log.d("INSERT_DATA", "Inserção bem-sucedida. ID do novo registro: " + result);
+        } catch (SQLException e) {
+            Log.e("INSERT_DATA", "Erro ao inserir dados: " + e.getMessage());
+        }
+
+        return result;
     }
 
-    public int updateSaldo(String titular, String newSaldo) {
+
+
+    public void updateSaldo(String titular, String newSaldo) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_SALDO, newSaldo);
         String whereClause = ModelBancoDados.COLUNA_TITULAR + " = ?";
         String[] whereArgs = {titular};
-        return database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
+        database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
     }
 
     public int updateCheque(String titular, String newCheque) {
@@ -95,7 +108,9 @@ public class ControllerBancoDados {
             Double cheque = 0.0;
             if (cursor != null && cursor.moveToFirst()) {
                 int chequeIndex = cursor.getColumnIndex(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL);
-                cheque = cursor.getDouble(chequeIndex);
+                if (!cursor.isNull(chequeIndex)) {
+                    cheque = cursor.getDouble(chequeIndex);
+                }
             }
             if (cursor != null) {
                 cursor.close();
