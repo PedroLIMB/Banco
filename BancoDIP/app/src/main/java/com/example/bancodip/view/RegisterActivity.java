@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
                 double chequeEspecial = saldoDouble * 4;
 
                 try {
-                    controllerBancoDados.insertData(nome, email, saldoDouble, chequeEspecial);
+                    controllerBancoDados.insertData(nome, email, saldoDouble, chequeEspecial, chequeEspecial);
                     intent.putExtra("nome", nome);
                     intent.putExtra("email", email);
                     intent.putExtra("saldo", saldoDouble);

@@ -8,15 +8,16 @@ import androidx.annotation.Nullable;
 
 public class ModelBancoDados extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "BancoDosMano.db";
+    private static final String DATABASE_NAME = "BancoDD.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String NOME_TABELA = "BancoDIPs";
+    public static final String NOME_TABELA = "BancoDIP";
     public static final String COLUNA_ID = "id";
     public static final String COLUNA_TITULAR = "titular";
     public static final String COLUNA_EMAIL = "email";
     public static final String COLUNA_SALDO= "saldo";
     public static final String COLUNA_CHEQUE_ESPECIAL = "cheque_especial";
+    public static final String COLUNA_CHEQUE_ESPECIAL_DEFI = "cheque_especial_defi";
 
     private static final String TABLE_CREATE =
             "CREATE TABLE " + NOME_TABELA + " (" +
@@ -24,8 +25,10 @@ public class ModelBancoDados extends SQLiteOpenHelper {
                     COLUNA_TITULAR + " VARCHAR(80), " +
                     COLUNA_EMAIL + " VARCHAR(80), " +
                     COLUNA_CHEQUE_ESPECIAL + " DECIMAL(10,2), " +
+                    COLUNA_CHEQUE_ESPECIAL_DEFI + " DECIMAL(10,2), " +
                     COLUNA_SALDO + " DECIMAL(10,2)" +
                     ");";
+
 
 
     public ModelBancoDados(Context context) {

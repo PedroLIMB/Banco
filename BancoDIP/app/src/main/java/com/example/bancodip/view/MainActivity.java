@@ -1,8 +1,10 @@
 package com.example.bancodip.view;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     Double valorSaldo = controllerBancoDados.getSaldoByTitular(nome);
                     Double novoSaldo = Double.parseDouble(valorCliente) + valorSaldo ;
 
-                    controllerBancoDados.updateSaldo(nome, String.valueOf(novoSaldo));
+                    controllerBancoDados.updateSaldo(nome, novoSaldo);
 
                     binding.saldoConta.setText(String.valueOf(novoSaldo));
 
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
             controllerBancoDados.open();
 
             String valorCliente = binding.hintUserValor.getText().toString();
+            Double saldo = controllerBancoDados.getSaldoByTitular(nome);
+            Double cheque = controllerBancoDados.getChequeByTitular(nome);
 
             if(!valorCliente.isEmpty()){
                 try {
@@ -86,9 +90,15 @@ public class MainActivity extends AppCompatActivity {
                     Double valorSaldo = controllerBancoDados.getSaldoByTitular(nome);
                     Double novoSaldo = valorSaldo - Double.parseDouble(valorCliente) ;
 
-                    controllerBancoDados.updateSaldo(nome, String.valueOf(novoSaldo));
-
+                    controllerBancoDados.updateSaldo(nome, novoSaldo);
                     binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+                    if(novoSaldo < 0){
+                        Double novoCheque = cheque - saldo;
+                        controllerBancoDados.updateCheque(nome, novoCheque);
+                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+
+                    }
 
 
                 }catch (Exception e){
@@ -98,6 +108,38 @@ public class MainActivity extends AppCompatActivity {
                     binding.hintUserValor.setText("");
                 }
             }
+
+
+
+//            if(saldo - Double.parseDouble(valorCliente) < 0 && saldo >= 0){
+//                controllerBancoDados.open();
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setTitle("Banco Dip");
+//                builder.setMessage("Ao fazer essa ação você caiu no cheque especial!");
+//                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        //nada aqui
+//                    }
+//                });
+//
+//                AlertDialog alerta = builder.create();
+//                alerta.show();
+//
+//
+//
+//            }
+//
+
+
+
+
+
+
+
+
+
 
         });
 
