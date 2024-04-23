@@ -17,6 +17,25 @@ public class TransferirActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityTransferirBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_transferir);
+        setContentView(binding.getRoot());
+
+        binding.btnTransferirUser.setOnClickListener(v -> {
+            String emailUser = binding.transUserEmail.getText().toString();
+            String valorUser = binding.transUserValor.getText().toString();
+
+            Double saldo = controllerBancoDados.getSaldoByTitular()
+
+            if(controllerBancoDados.isEmailInDatabase(emailUser) && ){
+
+            }
+
+
+        });
+
+        binding.btnVoltar.setOnClickListener(v -> {
+            finish();
+
+        });
+
     }
 }
