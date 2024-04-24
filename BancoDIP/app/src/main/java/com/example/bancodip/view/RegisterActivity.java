@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.bancodip.R;
 import com.example.bancodip.controller.ControllerBancoDados;
+import com.example.bancodip.controller.Util;
 import com.example.bancodip.databinding.ActivityRegisterBinding;
 
 import java.util.Locale;
@@ -16,6 +17,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private ControllerBancoDados controllerBancoDados;
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         controllerBancoDados = new ControllerBancoDados(this);
+        util = new Util();
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 
         binding.btnCriarConta.setOnClickListener(v -> {
@@ -33,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
             String email = binding.hintTxtRegisterEmail.getText().toString().toUpperCase().trim();
             String saldo = binding.hintTxtRegisterSaldo.getText().toString().trim();
 
-            if(!nome.isEmpty() && !email.isEmpty() && !saldo.isEmpty() && !controllerBancoDados.isEmailInDatabase(email)){
+            if(!nome.isEmpty() && !email.isEmpty() && !saldo.isEmpty() && util.isValidEmail(email) && !controllerBancoDados.isEmailInDatabase(email) ){
 
                 double saldoDouble = Double.parseDouble(saldo);
                 double chequeEspecial = saldoDouble * 4;

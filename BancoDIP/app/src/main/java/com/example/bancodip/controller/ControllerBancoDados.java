@@ -110,12 +110,12 @@ public class ControllerBancoDados {
         return cheque;
     }
 
-    public Double getChequeDEFIByTitular(String titular) {
+    public Double getChequeDEFIByTitular(String email) {
         Double cheque = 0.0;
         try (Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
                 new String[]{ModelBancoDados.COLUNA_CHEQUE_ESPECIAL_DEFI},
-                ModelBancoDados.COLUNA_TITULAR + " = ?",
-                new String[]{titular},
+                ModelBancoDados.COLUNA_EMAIL + " = ?",
+                new String[]{email},
                 null, null, null)) {
 
             if (cursor != null && cursor.moveToFirst()) {
