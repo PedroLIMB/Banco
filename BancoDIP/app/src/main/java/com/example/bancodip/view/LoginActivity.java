@@ -43,12 +43,16 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     intentMain.putExtra("nome", nome);
                     intentMain.putExtra("email", email);
+
                 }catch (Exception e){
                     e.printStackTrace();
+                }finally {
+                    controllerBancoDados.close();
+                    startActivity(intentMain);
+                    finish();
                 }
 
-                startActivity(intentMain);
-                finish();
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Erro", Toast.LENGTH_LONG).show();

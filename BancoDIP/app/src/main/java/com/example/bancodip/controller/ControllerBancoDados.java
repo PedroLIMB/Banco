@@ -50,19 +50,19 @@ public class ControllerBancoDados {
         return result;
     }
 
-    public void updateSaldo(String titular, double newSaldo) {
+    public void updateSaldo(String email, double newSaldo) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_SALDO, newSaldo);
-        String whereClause = ModelBancoDados.COLUNA_TITULAR + " = ?";
-        String[] whereArgs = {titular};
+        String whereClause = ModelBancoDados.COLUNA_EMAIL + " = ?";
+        String[] whereArgs = {email};
         database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
     }
 
-    public void updateCheque(String titular, double newCheque) {
+    public void updateCheque(String email, double newCheque) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL, newCheque);
-        String whereClause = ModelBancoDados.COLUNA_TITULAR + " = ?";
-        String[] whereArgs = {titular};
+        String whereClause = ModelBancoDados.COLUNA_EMAIL + " = ?";
+        String[] whereArgs = {email};
         database.update(ModelBancoDados.NOME_TABELA, contentValues, whereClause, whereArgs);
     }
 
@@ -72,12 +72,12 @@ public class ControllerBancoDados {
                 null, null, null, null, null);
     }
 
-    public Double getSaldoByTitular(String titular) {
+    public Double getSaldoByTitular(String email) {
         Double saldo = 0.0;
         try (Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
                 new String[]{ModelBancoDados.COLUNA_SALDO},
-                ModelBancoDados.COLUNA_TITULAR + " = ?",
-                new String[]{titular},
+                ModelBancoDados.COLUNA_EMAIL + " = ?",
+                new String[]{email},
                 null, null, null)) {
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -90,12 +90,12 @@ public class ControllerBancoDados {
         return saldo;
     }
 
-    public Double getChequeByTitular(String titular) {
+    public Double getChequeByTitular(String email) {
         Double cheque = 0.0;
         try (Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
                 new String[]{ModelBancoDados.COLUNA_CHEQUE_ESPECIAL},
-                ModelBancoDados.COLUNA_TITULAR + " = ?",
-                new String[]{titular},
+                ModelBancoDados.COLUNA_EMAIL + " = ?",
+                new String[]{email},
                 null, null, null)) {
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -110,12 +110,12 @@ public class ControllerBancoDados {
         return cheque;
     }
 
-    public Double getChequeDEFIByTitular(String titular) {
+    public Double getChequeDEFIByTitular(String email) {
         Double cheque = 0.0;
         try (Cursor cursor = database.query(ModelBancoDados.NOME_TABELA,
                 new String[]{ModelBancoDados.COLUNA_CHEQUE_ESPECIAL_DEFI},
-                ModelBancoDados.COLUNA_TITULAR + " = ?",
-                new String[]{titular},
+                ModelBancoDados.COLUNA_EMAIL + " = ?",
+                new String[]{email},
                 null, null, null)) {
 
             if (cursor != null && cursor.moveToFirst()) {
