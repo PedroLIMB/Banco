@@ -43,24 +43,24 @@
   <main class="main">
     <div class="login-container">
       <div class="login">
-        <form action="" name="CadastroLogin" onsubmit="return validation()">
+        <form action="" id="cadastroForm" name="CadastroLogin" onsubmit="return validation()">
           <p id="resultado"></p>
 
           <h2>Registro</h2>
           <div class="entrada-login">
-            <input type="text" name="Nome" placeholder="Usuário" id="usuario">
+            <input type="text" name="Nome" placeholder="Usuário" id="nome" required>
           </div>
 
           <div class="entrada-login">
-            <input type="email" name="Email" placeholder="Email" id="email">
+            <input type="email" name="Email" placeholder="Email" id="email" required>
           </div>
 
           <div class="entrada-login">
-            <input type="password" name="Senha" placeholder="Senha" id="senha">
+            <input type="password" name="Senha" placeholder="Senha" id="senha" required>
           </div>
 
           <div class="entrada-login">
-            <input type="password" name="cSenha" placeholder="Confirmar senha">
+            <input type="password" name="cSenha" placeholder="Confirmar senha" required>
           </div>
 
           <div class="botao">
@@ -86,44 +86,7 @@
     </div>
   </main>
 
-  <script type="module">
-
-        // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-      import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
-
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBdSQiJDi-MqBjjoa40BU9gOukunecFV6A",
-        authDomain: "dip-web-d50de.firebaseapp.com",
-        projectId: "dip-web-d50de",
-        storageBucket: "dip-web-d50de.appspot.com",
-        messagingSenderId: "17106918179",
-        appId: "1:17106918179:web:1c3a1a838f571735444a96"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-
-      const db = getDatabase(app);
-
-      document.getElementById("linkOK").addEventListener('click', function(e){
-        e.preventDefault()
-
-        set(ref(db, 'usuarios/' + document.getElementById("usuario").value),
-        {
-
-            usuario: document.getElementById("usuario").value,
-            email: document.getElementById("email").value,
-            senha: document.getElementById("senha").value,
-            depositoInicial: document.getElementById("valorTransacao").value
-            
-        })
-
-      })
-
-  </script>
-
+  <script src="/PÁGINA DE LOGIN/BD.js"></script>
   <script src="cadastro.js"></script>
   <script src="../script-header.js"></script>
 

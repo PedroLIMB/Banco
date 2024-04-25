@@ -39,21 +39,21 @@
     
     <div class="login-container">
         <div class="login">
-          <form action="" name="CadastroLogin" onsubmit="return validation()">
+          <form action="" id="loginForm" name="CadastroLogin" onsubmit="return validation()">
             <p id="resultado"></p>
     
             <h2>Login</h2>
     
             <div class="entrada-login">
-              <input type="email" name="Email" placeholder="Email" id="email">
+              <input type="email" name="Email" placeholder="Email" id="email" required>
             </div>
     
             <div class="entrada-login">
-              <input type="password" name="Senha" placeholder="Senha" id="senha">
+              <input type="password" name="Senha" placeholder="Senha" id="senha" autocomplete="current-password" required>
             </div>
     
             <div class="botao">
-              <input type="button" class="btn" onclick="validation()" value="Login" id="btnLogin">
+              <input type="submit" class="btn" onclick="validation()" value="Login" id="btnLogin">
             </div>
     
             <div class="adicionais">
@@ -62,38 +62,9 @@
             </div>
           </form>
         </div>
-    
-        <script> 
-        
-              const firebaseConfig = {
-              apiKey: "AIzaSyBdSQiJDi-MqBjjoa40BU9gOukunecFV6A",
-              authDomain: "dip-web-d50de.firebaseapp.com",
-              projectId: "dip-web-d50de",
-              storageBucket: "dip-web-d50de.appspot.com",
-              messagingSenderId: "17106918179",
-              appId: "1:17106918179:web:1c3a1a838f571735444a96"
-              };
 
-              // Initialize Firebase
-              const app = initializeApp(firebaseConfig);
-      
-              function login() {
-              const Email = document.getElementById("email").value;
-              const senha = document.getElementById("senha").value;
-      
-              firebase
-                .database()
-                .ref("usuarios/" + Email)
-                .once("value", (snapshot) => {
-                  const userInfo = snapshot.val();
-                  if (userInfo && userInfo.senha === senha) {
-                    window.location.href = "/BANCO/index.html?email=" + Email;
-                  } else {
-                    alert("Invalid account number or password");
-                  }
-                });
-              }
-        </script>
+  <script src="/PÁGINA DE LOGIN/BD.js"></script>
+  <script src="../script-header.js"></script>
 
 </body>
 </html>
