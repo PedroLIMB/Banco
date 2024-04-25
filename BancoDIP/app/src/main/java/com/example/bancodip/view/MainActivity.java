@@ -77,12 +77,11 @@ public class MainActivity extends AppCompatActivity {
                     binding.saldoConta.setText(String.valueOf(novoSaldo));
 
 
-                    // resolver isso
-
-                    if(valorSaldo < 0 && cheque < CHEQUEESPECIAL && novoSaldo < 0){
+                    if(valorSaldo < 0 ){
                         controllerBancoDados.updateCheque(email, novoCheque);
                         binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
-                    } else{
+                    }
+                    if(novoSaldo >= 0 && cheque < CHEQUEESPECIAL){
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("BANCO DIP");
                         builder.setMessage("CHEQUE ESPECIAL PAGO");
@@ -95,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
                         AlertDialog alerta = builder.create();
                         alerta.show();
+
+                        controllerBancoDados.updateCheque(email, CHEQUEESPECIAL);
+                        binding.chequeEspecialConta.setText(String.valueOf(CHEQUEESPECIAL));
 
                     }
 
@@ -113,74 +115,56 @@ public class MainActivity extends AppCompatActivity {
 
             String valorCliente = binding.hintUserValor.getText().toString();
 
-            if(!valorCliente.isEmpty()){
+            if (!valorCliente.isEmpty()) {
                 try {
-
                     Double saldo = controllerBancoDados.getSaldoByTitular(email);
                     Double cheque = controllerBancoDados.getChequeByTitular(email);
+                    Double CHEQUEESPECIAL = controllerBancoDados.getChequeDEFIByTitular(email);
 
-                    Double novoSaldo = saldo - Double.parseDouble(valorCliente) ;
-                    Double novoCheque = cheque - Double.parseDouble(valorCliente);
+                    Double valorSaque = Double.parseDouble(valorCliente);
 
-
-                    if(saldo > 0 && novoSaldo < 0 ){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("BANCO DIP");
-                        builder.setMessage("Saldo insuficiente! Insira um valor valido");
-                        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // nada aqui
-                            }
-                        });
-
-                        AlertDialog alerta = builder.create();
-                        alerta.show();
-
-                    } else if(cheque > 0){
-                        controllerBancoDados.updateSaldo(email, novoSaldo);
-                        binding.saldoConta.setText(String.valueOf(novoSaldo));
-
-                    } else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("BANCO DIP");
-                        builder.setMessage("Você esta sem limite do cheque especial");
-                        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // nada aqui
-                            }
-                        });
-
-                        AlertDialog alerta = builder.create();
-                        alerta.show();
-                    }
-
-                    if(saldo <= 0 && cheque > 0){
-                        controllerBancoDados.updateCheque(email, novoCheque);
-                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
-
-                    }
+                    Double novoSaldo = saldo - valorSaque;
+                    Double novoCheque = cheque - valorSaque;
 
 
-                }catch (Exception e){
+                   if(saldo > 0 && novoSaldo < 0){
+                       AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                       builder.setTitle("BANCO DIP");
+                       builder.setMessage("Saldo insuficiente");
+                       builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               // nada aqui
+                           }
+                       });
+
+                       AlertDialog alerta = builder.create();
+                       alerta.show();
+                   } else{
+                       controllerBancoDados.updateSaldo(email, novoSaldo);
+                       binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+                       if(saldo <= 0 && cheque > 0){
+                           controllerBancoDados.updateCheque(email, novoCheque);
+                           binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+                       }
+                   }
+
+                   
+
+
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     controllerBancoDados.close();
                     binding.hintUserValor.setText("");
                 }
             }
-
-
-
-
-
-
-
-
-
-
         });
+
+
+
 
         binding.btnTransferir.setOnClickListener(v -> {
             startActivity(intentTrans);
