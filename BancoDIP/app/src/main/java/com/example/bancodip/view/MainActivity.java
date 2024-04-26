@@ -126,8 +126,15 @@ public class MainActivity extends AppCompatActivity {
                     Double novoSaldo = saldo - valorSaque;
                     Double novoCheque = cheque - valorSaque;
 
+                    Double novoSaldoMais = saldo + valorSaque;
 
-                   if(saldo > 0 && novoSaldo < 0){
+
+
+                   if(saldo > 0 && novoSaldo >= 0){
+                       controllerBancoDados.updateSaldo(email, novoSaldo);
+                       binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+                   } else if (saldo > 0 && novoSaldo < 0) {
                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
                        builder.setTitle("BANCO DIP");
                        builder.setMessage("Saldo insuficiente");
@@ -140,17 +147,27 @@ public class MainActivity extends AppCompatActivity {
 
                        AlertDialog alerta = builder.create();
                        alerta.show();
-                   } else{
-                       controllerBancoDados.updateSaldo(email, novoSaldo);
-                       binding.saldoConta.setText(String.valueOf(novoSaldo));
 
-                       if(saldo <= 0 && cheque > 0){
-                           controllerBancoDados.updateCheque(email, novoCheque);
-                           binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
-                       }
+                   } else if(saldo <= 0 && cheque > 0 && novoSaldoMais <= CHEQUEESPECIAL){
+                        controllerBancoDados.updateCheque(email, novoCheque);
+                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+
+                        controllerBancoDados.updateSaldo(email, novoSaldo);
+                        binding.saldoConta.setText(String.valueOf(novoSaldo));
+                    } else{
+                       AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                       builder.setTitle("BANCO DIP");
+                       builder.setMessage("Cheque teste");
+                       builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               // nada aqui
+                           }
+                       });
+
+                       AlertDialog alerta = builder.create();
+                       alerta.show();
                    }
-
-                   
 
 
 
