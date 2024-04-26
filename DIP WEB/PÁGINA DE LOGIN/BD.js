@@ -16,7 +16,7 @@ function cadastrar(event) {
   const nome = document.getElementById('nome').value;
   const email = document.getElementById('email').value;
   const senha = document.getElementById('senha').value;
-  const depositoInicial = document.getElementById('valorTransacao').value;
+  const depositoInicial = document.getElementById('depositoInicial').value;
 
   const usuario = {
     nome: nome,

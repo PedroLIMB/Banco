@@ -63,9 +63,12 @@
             <input type="password" name="cSenha" placeholder="Confirmar senha" required>
           </div>
 
+          <div class="entrada-login">
+            <input type="number" name="depositoInicial" placeholder="Depósito Inicial" id="depositoInicial" required>
+          </div>
+
           <div class="botao">
-                <input type="submit" class="btn" onclick="validation()" value="Registro" id="registro">
-            </a>
+            <input type="submit" class="btn" onclick="validation()" value="Registro" id="registro">
         </div>
 
           <div class="adicionais">
@@ -77,12 +80,10 @@
       <div class="loginConfirmado" id="loginConfirmado">
         <ion-icon name="checkmark-circle-outline"></ion-icon>
         <h2>Obrigado!</h2>
-        <p>Você foi registrado com sucesso!</p>
-        <p>Digite o Valor do Depósito Inicial:</p>
-        <input type="number" id="valorTransacao" placeholder="Digite o valor...">
-        <button id="botaoDeposito">Depósito Inicial</button>
-        <a id="linkOK" href="/BANCO/index.html"><button onclick="CloseSlide()" disabled>OK</button></a>
+        <p>Você foi registrado com sucesso. Obrigado!</p>
+        <a href="/BANCO/index.html"><button onclick="CloseSlide()">OK</button></a>
       </div>
+
     </div>
   </main>
 
