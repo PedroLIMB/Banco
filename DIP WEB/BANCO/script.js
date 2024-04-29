@@ -1,9 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
+  // Verificar se o usuário está logado
+  const emailLogado = localStorage.getItem('emailLogado');
+  if (!emailLogado) {
+    // Se o usuário não estiver logado, redirecionar para a página de login
+    window.location.href = '../PÁGINA DE LOGIN/CADASTRO/cadastro.html';
+    return; // Parar a execução do restante do código
+  }
+
   // Selecionando os elementos HTML relevantes
   const saldoElement = document.getElementById("saldo");
+  const limiteChequeEspecialElement = document.getElementById("limiteChequeEspecial");
   const valorTransacaoInput = document.getElementById("valorTransacao");
   const resultadoElement = document.getElementById("resultado");
-  const limiteChequeEspecial = 500;
 
   // Função para atualizar o saldo exibido na página
   function atualizarSaldo(valor) {
@@ -13,6 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
   // Função para exibir mensagens de resultado na página
   function exibirResultado(mensagem) {
     resultadoElement.textContent = mensagem;
+  }
+
+  // Função para definir o limite do cheque especial
+  function definirLimiteChequeEspecial(valor) {
+    limiteChequeEspecialElement.textContent = `R$${valor.toFixed(2)}`;
   }
 
   // Função para exibir o formulário de transferência
@@ -172,4 +185,20 @@ document.addEventListener("DOMContentLoaded", function() {
     // Exibir o formulário de transferência
     exibirFormularioTransferencia();
   });
+
+  // Recuperar o valor do depósito inicial do localStorage
+  const email = localStorage.getItem('emailLogado');
+  const userData = localStorage.getItem(email);
+  if (userData) {
+    const usuario = JSON.parse(userData);
+    const depositoInicial = parseFloat(usuario.depositoInicial);
+    if (!isNaN(depositoInicial) && depositoInicial > 0) {
+      // Atualizar o saldo com o valor do depósito inicial
+      atualizarSaldo(depositoInicial);
+
+      // Definir o limite do cheque especial como 4 vezes o valor do depósito inicial
+      const limiteChequeEspecial = depositoInicial * 4;
+      definirLimiteChequeEspecial(limiteChequeEspecial);
+    }
+  }
 });
