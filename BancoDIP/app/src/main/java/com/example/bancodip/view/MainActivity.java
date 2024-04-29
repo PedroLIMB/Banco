@@ -128,47 +128,48 @@ public class MainActivity extends AppCompatActivity {
 
                     Double novoSaldoMais = saldo + valorSaque;
 
-
-
-                   if(saldo > 0 && novoSaldo >= 0){
-                       controllerBancoDados.updateSaldo(email, novoSaldo);
-                       binding.saldoConta.setText(String.valueOf(novoSaldo));
-
-                   } else if (saldo > 0 && novoSaldo < 0) {
-                       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                       builder.setTitle("BANCO DIP");
-                       builder.setMessage("Saldo insuficiente");
-                       builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               // nada aqui
-                           }
-                       });
-
-                       AlertDialog alerta = builder.create();
-                       alerta.show();
-
-                   } else if(saldo <= 0 && cheque > 0 && novoSaldoMais <= CHEQUEESPECIAL){
-                        controllerBancoDados.updateCheque(email, novoCheque);
-                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
-
+                    if (saldo > 0 && novoSaldo >= 0) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
                         binding.saldoConta.setText(String.valueOf(novoSaldo));
+                    } else if (saldo <= 0 && novoSaldo > -CHEQUEESPECIAL) {
+                        controllerBancoDados.updateSaldo(email, novoSaldo);
+                        binding.saldoConta.setText(String.valueOf(novoSaldo));
+
+                        controllerBancoDados.updateCheque(email, novoCheque);
+                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+                    } else if (saldo <= -CHEQUEESPECIAL) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("BANCO DIP");
+                        builder.setMessage("Sem cheque especial");
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Nada aqui
+                            }
+                        });
+
+                        AlertDialog alerta = builder.create();
+                        alerta.show();
+
+                        controllerBancoDados.updateSaldo(email, -CHEQUEESPECIAL);
+                        binding.saldoConta.setText(String.valueOf(-CHEQUEESPECIAL));
+
+                        controllerBancoDados.updateCheque(email, 0);
+                        binding.chequeEspecialConta.setText(String.valueOf(0.00));
                     } else{
-                       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                       builder.setTitle("BANCO DIP");
-                       builder.setMessage("Cheque teste");
-                       builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               // nada aqui
-                           }
-                       });
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("BANCO DIP");
+                        builder.setMessage("Saldo insuficiente");
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Nada aqui
+                            }
+                        });
 
-                       AlertDialog alerta = builder.create();
-                       alerta.show();
-                   }
-
+                        AlertDialog alerta = builder.create();
+                        alerta.show();
+                    }
 
 
                 } catch (Exception e) {
