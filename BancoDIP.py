@@ -1,4 +1,4 @@
-import mysql.connector
+import sqlite3
 from tkinter import *
 import customtkinter
 from PIL import Image
@@ -9,32 +9,108 @@ import os
 # pip install customtkinter
 
 # Conexão com o banco de dados
-bd = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=""
-)
-cursor = bd.cursor()
+
+class Conta():
+    def __init__(self, titular, email, senha, saldo, cheque_especial):
+        self.titular = titular
+        self.email = email
+        self.saldo = saldo
+        self.cheque_especial = cheque_especial
+        
+    def depositar(self, valor):
+        self.saldo += valor
+    
+    def sacar(self, valor):
+        if self.saldo > 0:
+            self.saldo -= valor
+        else:
+            pass
+    
+    def consultar_saldo(self):
+        return self.saldo
 
 
-def criar_bd():
-    nome_bd = ("bancodip").lower()
-    cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(nome_bd))
-    cursor.execute("USE {}".format(nome_bd))
-    bd.commit()
-
-
-def criar_tabela():
-    nome_tabela = ("tabeladip").lower()
-    tabela = '''CREATE TABLE IF NOT EXISTS {} (
-                id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-                usuario VARCHAR(20) NOT NULL,
-                email VARCHAR(45) NOT NULL,
-                senha VARCHAR(30) NOT NULL,
-                saldo DECIMAL(7,2) NOT NULL)'''.format(nome_tabela)
-    cursor.execute(tabela)
-    bd.commit()
-
+class Banco():
+    def __init__(self):
+        self.banco = sqlite3.connect("bancoDip.db")
+        self.cursor = self.banco.cursor();
+        self.cursor.execute('''
+                            CREATE TABLE IF NOT EXISTS banco(id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                            titular VARCHAR(80), 
+                            email VARCHAR(80), 
+                            senha VARCHAR(24),
+                            saldo DECIMAL, 
+                            cheque_especial DECIMAL)
+                            ''')
+        
+        self.banco.commit()
+        self.banco.close()
+        
+    def criar_conta(self, conta):
+        try:
+            self.banco = sqlite3.connect("bancoDip.db")
+            self.cursor = self.banco.cursor();
+            self.cursor.execute("INSERT INTO banco (titular, email, senha, saldo, cheque_especial) VALUES (?, ?, ?, ?, ?)", (conta.titular, conta.email, conta.senha, conta.saldo, 
+                                                                                                                             conta.saldo * 4))
+            self.banco.commit()
+            self.banco.close()
+            
+        except sqlite3.Error as err:
+            print(err)
+            
+    def depositar(self, email, valor):
+        try:
+            self.banco = sqlite3.connect("bancoDip.db")
+            self.cursor = self.banco.cursor();
+            self.cursor.execute("UPDATE banco SET saldo = saldo + ? where email = ?", (valor, email))
+    
+        except sqlite3.Error as err:
+            print(err)
+        finally:
+            self.banco.commit()
+            self.banco.close() 
+            
+    def sacar(self, email, valor):
+        try:
+            self.banco = sqlite3.connect("bancoDip.db")
+            self.cursor = self.banco.cursor();
+            
+            cheque_especial = self.cursor.execute("SELECT cheque_especial FROM banco WHERE email = ?", (email,))
+            saldo = self.cursor.execute("SELECT saldo FROM banco WHERE email = ?", (email,))
+            
+            if cheque_especial > 0:
+                self.cursor.execute("UPDATE banco SET saldo = saldo - ? where email = ?", (valor, email))
+            elif saldo <= 0:
+                self.cursor.execute("UPDATE banco SET cheque_especial = cheque_especial - ? where email = ?", (valor, email))
+            
+                
+        except sqlite3.Error as err:
+            print(err)
+        finally:
+            self.banco.commit()
+            self.banco.close()
+        
+    def transferir(self, valor, email, email_transf):
+        try:
+            self.banco = sqlite3.connect("bancoDip.db")
+            self.cursor = self.banco.cursor();
+            
+            saldo = self.cursor.execute("SELECT saldo FROM banco WHERE email = ?", (email,))
+            
+            if saldo > 0:
+                self.cursor.execute("UPDATE banco SET saldo = saldo + ? where email = ?", (valor, email_transf))
+            else:
+                pass
+            
+                
+        except sqlite3.Error as err:
+            print(err)
+        finally:
+            self.banco.commit()
+            self.banco.close()
+            
+    
+            
 
 class Interface():
     def tela_login():
