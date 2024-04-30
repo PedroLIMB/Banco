@@ -3,15 +3,21 @@ document.addEventListener("DOMContentLoaded", function() {
   const emailLogado = localStorage.getItem('emailLogado');
   if (!emailLogado) {
     // Se o usuário não estiver logado, redirecionar para a página de login
-    window.location.href = '../PÁGINA DE LOGIN/CADASTRO/cadastro.html';
+    window.location.href = '../PÁGINA DE LOGIN/LOGIN/login.html';
     return; // Parar a execução do restante do código
   }
 
-  // Selecionando os elementos HTML relevantes
+  // Selecionando os elementos HTML 
   const saldoElement = document.getElementById("saldo");
   const limiteChequeEspecialElement = document.getElementById("limiteChequeEspecial");
   const valorTransacaoInput = document.getElementById("valorTransacao");
   const resultadoElement = document.getElementById("resultado");
+  let limiteChequeEspecial = 0; // Inicialmente, o limite do cheque especial é 0
+
+  // Função para atualizar o limite do cheque especial exibido na página
+  function atualizarLimiteChequeEspecial(limite) {
+    limiteChequeEspecialElement.textContent = `R$${limite.toFixed(2)}`;
+  }
 
   // Função para atualizar o saldo exibido na página
   function atualizarSaldo(valor) {
@@ -21,11 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
   // Função para exibir mensagens de resultado na página
   function exibirResultado(mensagem) {
     resultadoElement.textContent = mensagem;
-  }
-
-  // Função para definir o limite do cheque especial
-  function definirLimiteChequeEspecial(valor) {
-    limiteChequeEspecialElement.textContent = `R$${valor.toFixed(2)}`;
   }
 
   // Função para exibir o formulário de transferência
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const valor = parseFloat(valorInput.value);
       const contaDestino = contaInput.value;
       // Executar a transação de transferência
-      executarTransacao("Transferência", valor, contaDestino);
+      transferir(valor, parseFloat(saldoElement.textContent.replace("R$", "")), contaDestino);
       container.remove();
     });
     formulario.appendChild(botaoConfirmar);
@@ -82,51 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.body.appendChild(container);
   }
 
-  // Função para exibir a pergunta sobre o uso do cheque especial
-  function exibirPerguntaChequeEspecial() {
-    const usarChequeEspecial = confirm("Você deseja usar o cheque especial?");
-    return usarChequeEspecial;
-  }
-
-  // Função para executar uma transação
-  function executarTransacao(tipo, valor, contaDestino) {
-    const valorTransacao = parseFloat(valor);
-    if (isNaN(valorTransacao) || valorTransacao <= 0) {
-      // Verificar se o valor da transação é válido
-      exibirResultado("Por favor, digite um valor válido.");
-      return;
-    }
-
-    // Obter o saldo atual
-    const saldoAtual = parseFloat(saldoElement.textContent.replace("R$", ""));
-
-    if (tipo === "Saque" && valorTransacao > saldoAtual) {
-      // Verificar se é uma transação de saque e se o saldo é suficiente
-      const usarChequeEspecial = exibirPerguntaChequeEspecial();
-      if (!usarChequeEspecial) {
-        // Se o usuário não quiser usar o cheque especial, cancelar a transação
-        exibirResultado("Saque cancelado.");
-        return;
-      }
-    }
-
-    // Realizar a transação com base no tipo
-    switch (tipo) {
-      case "Depósito":
-        depositar(valorTransacao, saldoAtual);
-        break;
-      case "Saque":
-        sacar(valorTransacao, saldoAtual);
-        break;
-      case "Transferência":
-        transferir(valorTransacao, saldoAtual, contaDestino);
-        break;
-      default:
-        exibirResultado("Tipo de transação inválido.");
-        break;
-    }
-  }
-
   // Função para processar um depósito
   function depositar(valor, saldoAtual) {
     const novoSaldo = saldoAtual + valor;
@@ -138,12 +94,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Função para processar um saque
   function sacar(valor, saldoAtual) {
-    const saldoDisponivel = saldoAtual + limiteChequeEspecial;
+    let saldoDisponivel = saldoAtual;
+    if (saldoAtual === 0) {
+      // Se o saldo for igual a 0, adicione o limite do cheque especial
+      saldoDisponivel += limiteChequeEspecial;
+    }
+
     if (valor > saldoDisponivel) {
-      // Verificar se o saldo e o limite de cheque especial são suficientes para o saque
-      exibirResultado("Saldo e limite de cheque especial insuficientes para realizar o saque.");
+      // Verificar se o saldo disponível é suficiente para o saque
+      exibirResultado("Saldo insuficiente para realizar o saque.");
       return;
     }
+
     // Calcular o novo saldo após o saque
     const novoSaldo = saldoAtual - valor;
     // Atualizar o saldo exibido na página
@@ -154,12 +116,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Função para processar uma transferência
   function transferir(valor, saldoAtual, contaDestino) {
-    const saldoDisponivel = saldoAtual + limiteChequeEspecial;
+    let saldoDisponivel = saldoAtual;
+    if (saldoAtual === 0) {
+      // Se o saldo for igual a 0, adicione o limite do cheque especial
+      saldoDisponivel += limiteChequeEspecial;
+    }
+
     if (valor > saldoDisponivel) {
-      // Verificar se o saldo e o limite de cheque especial são suficientes para a transferência
-      exibirResultado("Saldo e limite de cheque especial insuficientes para realizar a transferência.");
+      // Verificar se o saldo disponível é suficiente para a transferência
+      exibirResultado("Saldo insuficiente para realizar a transferência.");
       return;
     }
+
     // Calcular o novo saldo após a transferência
     const novoSaldo = saldoAtual - valor;
     // Atualizar o saldo exibido na página
@@ -170,15 +138,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Adicionar ouvintes de eventos aos botões de transação
   document.getElementById("botaoDeposito").addEventListener("click", function() {
-    const valor = valorTransacaoInput.value;
+    const valor = parseFloat(valorTransacaoInput.value);
     // Executar uma transação de depósito
-    executarTransacao("Depósito", valor);
+    depositar(valor, parseFloat(saldoElement.textContent.replace("R$", "")));
   });
 
   document.getElementById("botaoSaque").addEventListener("click", function() {
-    const valor = valorTransacaoInput.value;
+    const valor = parseFloat(valorTransacaoInput.value);
     // Executar uma transação de saque
-    executarTransacao("Saque", valor);
+    sacar(valor, parseFloat(saldoElement.textContent.replace("R$", "")));
   });
 
   document.getElementById("botaoTransferencia").addEventListener("click", function() {
@@ -195,10 +163,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!isNaN(depositoInicial) && depositoInicial > 0) {
       // Atualizar o saldo com o valor do depósito inicial
       atualizarSaldo(depositoInicial);
-
       // Definir o limite do cheque especial como 4 vezes o valor do depósito inicial
-      const limiteChequeEspecial = depositoInicial * 4;
-      definirLimiteChequeEspecial(limiteChequeEspecial);
+      limiteChequeEspecial = depositoInicial * 4;
+      // Atualizar o limite do cheque especial exibido na página
+      atualizarLimiteChequeEspecial(limiteChequeEspecial);
     }
   }
 });
