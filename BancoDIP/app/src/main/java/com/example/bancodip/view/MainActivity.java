@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     if (saldo > 0 && novoSaldo >= 0) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
                         binding.saldoConta.setText(String.valueOf(novoSaldo));
-                    } else if (saldo <= 0 && novoSaldo > -CHEQUEESPECIAL) {
+                    } else if (saldo <= 0 && novoSaldo >= -CHEQUEESPECIAL) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
                         binding.saldoConta.setText(String.valueOf(novoSaldo));
 

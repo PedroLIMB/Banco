@@ -51,7 +51,23 @@ public class TransferirActivity extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                 } finally {
-//                    controllerBancoDados.close();
+                    controllerBancoDados.close();
+                    binding.transUserValor.setText("");
+                    binding.transUserEmail.setText("");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("BANCO DIP");
+                    builder.setMessage("Sucesso");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nada aqui
+                        }
+                    });
+
+                    AlertDialog alerta = builder.create();
+                    alerta.show();
+
                 }
             }else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
