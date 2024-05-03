@@ -18,6 +18,7 @@
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_medium"
         android:textAllCaps="true"
+        android:textStyle="bold"
         android:textSize="50sp"
 
         app:layout_constraintTop_toTopOf="parent"

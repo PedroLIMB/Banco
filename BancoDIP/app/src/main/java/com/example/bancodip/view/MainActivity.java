@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
             binding.userName.setText("Olá, " + util.primeiraLetraMaiscula(nome));
             binding.saldoConta.setText("R$ " + saldoString);
-            binding.chequeEspecialConta.setText(chequeString);
+            binding.chequeEspecialConta.setText("R$" + chequeString);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -74,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
                     Double novoCheque = cheque + Double.parseDouble(valorCliente);
 
                     controllerBancoDados.updateSaldo(email, novoSaldo);
-                    binding.saldoConta.setText(String.valueOf(novoSaldo));
+                    binding.saldoConta.setText("R$ "+ String.valueOf(novoSaldo));
 
 
                     if(valorSaldo < 0 ){
                         controllerBancoDados.updateCheque(email, novoCheque);
-                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+                        binding.chequeEspecialConta.setText("R$ "+ String.valueOf(novoCheque));
                     }
                     if(novoSaldo >= 0 && cheque < CHEQUEESPECIAL){
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         alerta.show();
 
                         controllerBancoDados.updateCheque(email, CHEQUEESPECIAL);
-                        binding.chequeEspecialConta.setText(String.valueOf(CHEQUEESPECIAL));
+                        binding.chequeEspecialConta.setText("R$ " + String.valueOf(CHEQUEESPECIAL));
 
                     }
 
@@ -130,13 +130,13 @@ public class MainActivity extends AppCompatActivity {
 
                     if (saldo > 0 && novoSaldo >= 0) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
-                        binding.saldoConta.setText(String.valueOf(novoSaldo));
+                        binding.saldoConta.setText("R$ " + String.valueOf(novoSaldo));
                     } else if (saldo <= 0 && novoSaldo >= -CHEQUEESPECIAL) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
-                        binding.saldoConta.setText(String.valueOf(novoSaldo));
+                        binding.saldoConta.setText("R$ " + String.valueOf(novoSaldo));
 
                         controllerBancoDados.updateCheque(email, novoCheque);
-                        binding.chequeEspecialConta.setText(String.valueOf(novoCheque));
+                        binding.chequeEspecialConta.setText("R$ " + String.valueOf(novoCheque));
                     } else if (saldo <= -CHEQUEESPECIAL) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("BANCO DIP");
@@ -152,10 +152,10 @@ public class MainActivity extends AppCompatActivity {
                         alerta.show();
 
                         controllerBancoDados.updateSaldo(email, -CHEQUEESPECIAL);
-                        binding.saldoConta.setText(String.valueOf(-CHEQUEESPECIAL));
+                        binding.saldoConta.setText("R$ " + String.valueOf(-CHEQUEESPECIAL));
 
                         controllerBancoDados.updateCheque(email, 0);
-                        binding.chequeEspecialConta.setText(String.valueOf(0.00));
+                        binding.chequeEspecialConta.setText("R$ " + String.valueOf(0.00));
                     } else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("BANCO DIP");
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         String email = intent.getStringExtra("email");
         Double saldo = controllerBancoDados.getSaldoByTitular(email);
 
-        binding.saldoConta.setText(String.valueOf(saldo));
+        binding.saldoConta.setText("R$ " + String.valueOf(saldo));
 
     }
 

@@ -19,6 +19,7 @@
         android:textColor="@color/white"
         android:textSize="35sp"
         android:textAllCaps="true"
+        android:textStyle="bold"
         android:fontFamily="@font/roboto_medium"
 
 
