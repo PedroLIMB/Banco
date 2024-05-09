@@ -76,21 +76,5 @@
 
         />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_voltar"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-
-        android:background="@drawable/btn_background"
-
-        android:text="@string/btn_txt_voltar"
-        android:fontFamily="@font/roboto_medium"
-
-
-        />
-
-
-
-
 
 </LinearLayout>
