@@ -199,8 +199,10 @@ public class MainActivity extends AppCompatActivity {
 
         String email = intent.getStringExtra("email");
         Double saldo = controllerBancoDados.getSaldoByTitular(email);
+        Double cheque = controllerBancoDados.getChequeByTitular(email);
 
         binding.saldoConta.setText("R$ " + String.valueOf(saldo));
+        binding.chequeEspecialConta.setText("R$ " + String.valueOf(cheque));
 
     }
 

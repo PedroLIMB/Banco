@@ -32,6 +32,7 @@ public class TransferirActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String emailUser = intent.getStringExtra("email_trans");
         Double saldoUser = controllerBancoDados.getSaldoByTitular(emailUser);
+        Double chequeUser = controllerBancoDados.getChequeByTitular(emailUser);
 
         binding.btnTransferirUser.setOnClickListener(v -> {
 
@@ -57,7 +58,7 @@ public class TransferirActivity extends AppCompatActivity {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("BANCO DIP");
-                    builder.setMessage("Sucesso");
+                    builder.setMessage("Transferência concluída");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -69,7 +70,37 @@ public class TransferirActivity extends AppCompatActivity {
                     alerta.show();
 
                 }
-            }else {
+            }else if(controllerBancoDados.isEmailInDatabase(destinatarioEmail) && saldoUser <= 0 && chequeUser > 0){
+                try{
+                    Double saldoUserNew = saldoUser - Double.parseDouble(valorUser);
+                    Double chequeUserNew = chequeUser - Double.parseDouble(valorUser);
+                    Double saldoDestinatarioNew = destinatarioSaldo + Double.parseDouble(valorUser);
+
+                    controllerBancoDados.updateSaldo(destinatarioEmail, saldoDestinatarioNew);
+                    controllerBancoDados.updateCheque(emailUser, chequeUserNew);
+                    controllerBancoDados.updateSaldo(emailUser, saldoUserNew);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
+                    controllerBancoDados.close();
+                    binding.transUserValor.setText("");
+                    binding.transUserEmail.setText("");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("BANCO DIP");
+                    builder.setMessage("Transferência concluída");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Nada aqui
+                        }
+                    });
+
+                    AlertDialog alerta = builder.create();
+                    alerta.show();
+                }
+
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("BANCO DIP");
                 builder.setMessage("Saldo insuficiente ou email invalido");
