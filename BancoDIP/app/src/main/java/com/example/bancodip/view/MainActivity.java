@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                     Double valorSaldo = controllerBancoDados.getSaldoByTitular(email);
                     Double CHEQUEESPECIAL = controllerBancoDados.getChequeDEFIByTitular(email);
 
+                    Double valorClienteDou = Double.parseDouble(valorCliente);
+
                     Double novoSaldo = Double.parseDouble(valorCliente) + valorSaldo ;
                     Double novoCheque = cheque + Double.parseDouble(valorCliente);
 
@@ -77,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
                     binding.saldoConta.setText("R$ "+ String.valueOf(novoSaldo));
 
 
-                    if(valorSaldo < 0 ){
+                    if(valorSaldo < 0 && !(valorClienteDou < 0)){
                         controllerBancoDados.updateCheque(email, novoCheque);
                         binding.chequeEspecialConta.setText("R$ "+ String.valueOf(novoCheque));
                     }
-                    if(novoSaldo >= 0 && cheque < CHEQUEESPECIAL){
+                    if(novoSaldo >= 0 && cheque < CHEQUEESPECIAL && !(valorClienteDou < 0)){
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("BANCO DIP");
                         builder.setMessage("CHEQUE ESPECIAL PAGO");
@@ -128,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
                     Double novoSaldoMais = saldo + valorSaque;
 
-                    if (saldo > 0 && novoSaldo >= 0) {
+                    if (saldo > 0 && novoSaldo >= 0 && !(valorSaque < 0)) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
                         binding.saldoConta.setText("R$ " + String.valueOf(novoSaldo));
-                    } else if (saldo <= 0 && novoSaldo >= -CHEQUEESPECIAL) {
+                    } else if (saldo <= 0 && novoSaldo >= -CHEQUEESPECIAL && !(valorSaque < 0)) {
                         controllerBancoDados.updateSaldo(email, novoSaldo);
                         binding.saldoConta.setText("R$ " + String.valueOf(novoSaldo));
 

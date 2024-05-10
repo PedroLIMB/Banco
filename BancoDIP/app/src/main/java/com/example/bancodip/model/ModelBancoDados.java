@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class ModelBancoDados extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "BancoDILP.db";
+    private static final String DATABASE_NAME = "BancoDil.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String NOME_TABELA = "BancoDIP";
