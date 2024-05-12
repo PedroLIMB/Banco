@@ -39,50 +39,38 @@ public class TransferirActivity extends AppCompatActivity {
             Double destinatarioSaldo = controllerBancoDados.getSaldoByTitular(destinatarioEmail);
             String valorUser = binding.transUserValor.getText().toString();
 
-            if (controllerBancoDados.isEmailInDatabase(destinatarioEmail)) {
+            if (controllerBancoDados.isEmailInDatabase(destinatarioEmail) && !destinatarioEmail.equals(emailUser)) {
                 try {
                     Double valorTransferencia = Double.parseDouble(valorUser);
 
-                    if (saldoUser >= valorTransferencia) {
-                        // Saldo é suficiente para a transferência
-                        Double saldoUserNew = saldoUser - valorTransferencia;
-                        Double saldoDestinatarioNew = destinatarioSaldo + valorTransferencia;
-
-                        controllerBancoDados.updateSaldo(destinatarioEmail, saldoDestinatarioNew);
-                        controllerBancoDados.updateSaldo(emailUser, saldoUserNew);
-                    } else if (chequeUser >= valorTransferencia) {
-                        // Usa o cheque especial para cobrir a diferença
-                        Double saldoUserNew = saldoUser - valorTransferencia;
-                        Double chequeUserNew = chequeUser - valorTransferencia + saldoUser;
-                        Double saldoDestinatarioNew = destinatarioSaldo + valorTransferencia;
-
-                        controllerBancoDados.updateSaldo(destinatarioEmail, saldoDestinatarioNew);
-                        controllerBancoDados.updateSaldo(emailUser, saldoUserNew);
-                        controllerBancoDados.updateCheque(emailUser, chequeUserNew);
-                    } else {
-                        // Saldo e cheque especial insuficientes
+                    // Verifica se o saldo é suficiente para a transferência
+                    if (saldoUser < valorTransferencia && chequeUser + saldoUser < valorTransferencia) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setMessage("SALDO E CHEQUE ESPECIAL INSUFICIENTES PARA REALIZAR A TRANSFERÊNCIA");
-                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Nada aqui
-                            }
-                        });
+                        builder.setPositiveButton("Ok", (dialog, which) -> {});
                         AlertDialog alerta = builder.create();
                         alerta.show();
                         return;
                     }
 
-                    // Transferência efetuada com sucesso
+                    // Atualiza os saldos
+                    Double saldoUserNew = saldoUser - valorTransferencia;
+                    Double saldoDestinatarioNew = destinatarioSaldo + valorTransferencia;
+                    Double chequeUserNew = chequeUser;
+
+                    if (saldoUser < valorTransferencia) {
+                        // Usa o cheque especial para cobrir a diferença
+                        chequeUserNew -= valorTransferencia - saldoUser;
+                    }
+
+                    controllerBancoDados.updateSaldo(destinatarioEmail, saldoDestinatarioNew);
+                    controllerBancoDados.updateSaldo(emailUser, saldoUserNew);
+                    controllerBancoDados.updateCheque(emailUser, chequeUserNew);
+
+                    // Exibe mensagem de sucesso
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("TRANSFERÊNCIA EFETUADA COM SUCESSO");
-                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Nada aqui
-                        }
-                    });
+                    builder.setPositiveButton("Ok", (dialog, which) -> {});
                     AlertDialog alerta = builder.create();
                     alerta.show();
                 } catch (Exception e) {
@@ -93,17 +81,14 @@ public class TransferirActivity extends AppCompatActivity {
                     binding.transUserEmail.setText("");
                 }
             } else {
+                // Email do destinatário não cadastrado
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("EMAIL DO DESTINATÁRIO NÃO CADASTRADO");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Nada aqui
-                    }
-                });
+                builder.setPositiveButton("Ok", (dialog, which) -> {});
                 AlertDialog alerta = builder.create();
                 alerta.show();
             }
+
         });
 
 
