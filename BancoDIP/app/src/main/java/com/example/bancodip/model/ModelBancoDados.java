@@ -15,6 +15,7 @@ public class ModelBancoDados extends SQLiteOpenHelper {
     public static final String COLUNA_ID = "id";
     public static final String COLUNA_TITULAR = "titular";
     public static final String COLUNA_EMAIL = "email";
+    public static final String COLUNA_SENHA = "senha";
     public static final String COLUNA_SALDO= "saldo";
     public static final String COLUNA_CHEQUE_ESPECIAL = "cheque_especial";
     public static final String COLUNA_CHEQUE_ESPECIAL_DEFI = "cheque_especial_defi";
@@ -24,11 +25,11 @@ public class ModelBancoDados extends SQLiteOpenHelper {
                     COLUNA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUNA_TITULAR + " VARCHAR(80), " +
                     COLUNA_EMAIL + " VARCHAR(80), " +
+                    COLUNA_SENHA + " VARCHAR(30), " +
                     COLUNA_CHEQUE_ESPECIAL + " DECIMAL(10,2), " +
                     COLUNA_CHEQUE_ESPECIAL_DEFI + " DECIMAL(10,2), " +
                     COLUNA_SALDO + " DECIMAL(10,2)" +
                     ");";
-
 
 
     public ModelBancoDados(Context context) {

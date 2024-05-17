@@ -93,6 +93,25 @@
 
             />
 
+        <EditText
+            android:id="@+id/hint_text_senha"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+
+            android:layout_marginTop="20dp"
+
+            android:background="@drawable/edit_text_background"
+
+            android:padding="10dp"
+            android:textColorHint="@color/blue_type05"
+            android:fontFamily="@font/roboto_medium"
+            android:autofillHints="null"
+            android:textColor="@color/white"
+            android:lines="1"
+
+            android:hint="@string/txt_senha"
+            android:inputType="textPassword" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_entrar_conta"
             android:layout_width="250dp"

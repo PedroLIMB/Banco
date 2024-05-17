@@ -4,6 +4,7 @@
     <string name="hint_name">Nome</string>
     <string name="hint_email">E-mail</string>
     <string name="hint_saldo">Saldo</string>
+    <string name="hint_register_saldo">Saldo inicial</string>
     <string name="btn_txt_criar_conta">Criar Conta</string>
     <string name="txt_entrar">Entrar</string>
     <string name="txt_boas_vindas">Olá,</string>
@@ -18,6 +19,7 @@
     <string name="txt_sacar">sacar</string>
     <string name="descricao_da_imagem_do_banco">image logo banco</string>
     <string name="txt_cheque_especial">Cheque especial</string>
+    <string name="txt_senha">Senha</string>
 
 
 </resources>

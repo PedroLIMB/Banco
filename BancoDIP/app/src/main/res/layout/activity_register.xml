@@ -30,7 +30,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_height="500dp"
         android:orientation="vertical"
         android:gravity="center"
 
@@ -93,6 +93,24 @@
             />
 
         <EditText
+            android:id="@+id/hint_txt_register_senha"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+
+            android:layout_marginTop="20dp"
+
+            android:background="@drawable/edit_text_background"
+
+            android:padding="10dp"
+            android:textColorHint="@color/blue_type05"
+            android:fontFamily="@font/roboto_medium"
+            android:autofillHints="emailAddress"
+            android:textColor="@color/white"
+
+            android:hint="@string/txt_senha"
+            android:inputType="textPassword" />
+
+        <EditText
             android:id="@+id/hint_txt_register_saldo"
             android:layout_width="250dp"
             android:layout_height="50dp"
@@ -107,7 +125,7 @@
             android:autofillHints="null"
             android:textColor="@color/white"
 
-            android:hint="@string/hint_saldo"
+            android:hint="@string/hint_register_saldo"
             android:inputType="number|numberDecimal"
 
             />
