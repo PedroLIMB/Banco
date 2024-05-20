@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
                         controllerBancoDados.updateCheque(email, novoCheque);
                         binding.chequeEspecialConta.setText("R$ " + String.valueOf(novoCheque));
+
                     } else if (saldo <= -CHEQUEESPECIAL) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("BANCO DIP");
