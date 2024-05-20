@@ -32,9 +32,10 @@ public class RegisterActivity extends AppCompatActivity {
         binding.btnCriarConta.setOnClickListener(v -> {
             controllerBancoDados.open();
 
-            String  nome = binding.hintTxtRegisterNome.getText().toString().toUpperCase().trim();
+            String nome = binding.hintTxtRegisterNome.getText().toString().toUpperCase().trim();
             String email = binding.hintTxtRegisterEmail.getText().toString().toUpperCase().trim();
             String saldo = binding.hintTxtRegisterSaldo.getText().toString().trim();
+            String senha = binding.hintTxtRegisterSenha.getText().toString().trim();
 
             if(!nome.isEmpty() && !email.isEmpty() && !saldo.isEmpty() && util.isValidEmail(email) && !controllerBancoDados.isEmailInDatabase(email) ){
 
@@ -42,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
                 double chequeEspecial = saldoDouble * 4;
 
                 try {
-                    controllerBancoDados.insertData(nome, email, saldoDouble, chequeEspecial, chequeEspecial);
+                    controllerBancoDados.insertData(nome, email, saldoDouble, chequeEspecial, chequeEspecial, senha);
                     intent.putExtra("nome", nome);
                     intent.putExtra("email", email);
                     intent.putExtra("saldo", saldoDouble);

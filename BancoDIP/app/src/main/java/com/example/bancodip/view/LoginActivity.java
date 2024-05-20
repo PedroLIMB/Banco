@@ -36,9 +36,10 @@ public class LoginActivity extends AppCompatActivity {
 
             String nome = binding.hintTxtNomeLogin.getText().toString().trim().toUpperCase();
             String email = binding.hintTxtEmail.getText().toString().trim().toUpperCase();
+            String senha = binding.hintTextSenha.getText().toString().trim();
 
 
-            if (controllerBancoDados.isNomeInDatabase(nome) && controllerBancoDados.isEmailInDatabase(email)){
+            if (controllerBancoDados.isNomeInDatabase(nome) && controllerBancoDados.isEmailInDatabase(email) && controllerBancoDados.isPasswordCorrect(email, senha)){
 
                 try {
                     intentMain.putExtra("nome", nome);

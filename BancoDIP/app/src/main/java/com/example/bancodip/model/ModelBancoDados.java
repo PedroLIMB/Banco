@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class ModelBancoDados extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "BancoDil.db";
+    private static final String DATABASE_NAME = "BancoDEPEPE.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String NOME_TABELA = "BancoDIP";
@@ -30,6 +30,7 @@ public class ModelBancoDados extends SQLiteOpenHelper {
                     COLUNA_CHEQUE_ESPECIAL_DEFI + " DECIMAL(10,2), " +
                     COLUNA_SALDO + " DECIMAL(10,2)" +
                     ");";
+
 
 
     public ModelBancoDados(Context context) {

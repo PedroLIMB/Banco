@@ -30,13 +30,14 @@ public class ControllerBancoDados {
         dbHelper.close();
     }
 
-    public long insertData(String name, String email, double saldo, double chequeEspecial, double chequeEspecialDefi) {
+    public long insertData(String name, String email, double saldo, double chequeEspecial, double chequeEspecialDefi, String senha) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ModelBancoDados.COLUNA_TITULAR, name);
         contentValues.put(ModelBancoDados.COLUNA_EMAIL, email);
         contentValues.put(ModelBancoDados.COLUNA_SALDO, saldo);
         contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL_DEFI, chequeEspecialDefi);
         contentValues.put(ModelBancoDados.COLUNA_CHEQUE_ESPECIAL, chequeEspecial);
+        contentValues.put(ModelBancoDados.COLUNA_SENHA, senha);
 
         long result = -1;
 
@@ -169,5 +170,26 @@ public class ControllerBancoDados {
         }
         return false;
     }
+
+    public boolean isPasswordCorrect(String email, String passwordToCheck) {
+        try (Cursor cursor = database.query(
+                ModelBancoDados.NOME_TABELA,
+                new String[]{ModelBancoDados.COLUNA_EMAIL, ModelBancoDados.COLUNA_SENHA}, // Supondo que a senha seja armazenada em uma coluna chamada "senha"
+                ModelBancoDados.COLUNA_EMAIL + " = ?", new String[]{email}, null, null, null)) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String senha = cursor.getString(cursor.getColumnIndex(ModelBancoDados.COLUNA_SENHA));
+                    if (passwordToCheck.equals(senha)) {
+                        return true;
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("PASSWORD_CHECK", "Erro ao verificar senha na base de dados: " + e.getMessage());
+        }
+        return false;
+    }
+
 
 }
