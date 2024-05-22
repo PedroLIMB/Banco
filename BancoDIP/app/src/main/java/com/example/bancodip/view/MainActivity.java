@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.example.bancodip.R;
@@ -15,6 +16,11 @@ import com.example.bancodip.controller.ControllerBancoDados;
 import com.example.bancodip.controller.Util;
 import com.example.bancodip.databinding.ActivityMainBinding;
 import com.example.bancodip.model.ModelBancoDados;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         controllerBancoDados = new ControllerBancoDados(this);
         util = new Util();
 
@@ -38,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         String email = intent.getStringExtra("email");
 
         intentTrans.putExtra("email_trans", email);
+
+        banco();
 
         try {
             controllerBancoDados.open();
@@ -56,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             controllerBancoDados.close();
         }
-
 
 
         binding.btnDepositar.setOnClickListener(v -> {
@@ -193,6 +201,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    private void banco() {
+        File f = new File("/data/data/com.example.bancodip/databases/BancoDEPEPE.db");
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            File dir = Environment.getExternalStorageDirectory();
+            File outputFile = new File(dir, "db_dump.db");
+            fos = new FileOutputStream(outputFile);
+            fis = new FileInputStream(f);
+            
+            while (true) {
+                int i = fis.read();
+                if (i != -1) {
+                    fos.write(i);
+                } else {
+                    break;
+                }
+            }
+            fos.flush();
+            Toast.makeText(this, "DB dump OK", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "DB dump ERROR", Toast.LENGTH_LONG).show();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     protected void onResume() {
