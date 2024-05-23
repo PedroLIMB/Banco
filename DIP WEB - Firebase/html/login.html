@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="/Imagens/LOGO DIP.ico">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyDOqHiQ8tnsIflSOrjWZGawDN4Iock2g0s",
+        authDomain: "bancodip-61293.firebaseapp.com",
+        databaseURL: "https://bancodip-61293-default-rtdb.firebaseio.com",
+        projectId: "bancodip-61293",
+        storageBucket: "bancodip-61293.appspot.com",
+        messagingSenderId: "550802117666",
+        appId: "1:550802117666:web:1d5a25c1ebf621fe95667b",
+        measurementId: "G-RGV9JTDSGL"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Login</title>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="dip.html">
+          <img src="/Imagens/LOGO DIP.png" alt="Logo Banco DIP">
+          Banco DIP
+        </a>
+      </div>
+      <nav>
+        <ul class="nav-links">
+        <li><a href="#">Sobre</a></li>
+        <li><a href="#">Serviços</a></li>
+        <li><a href="#">Contato</a></li>
+        <li><a href="#">Ajuda</a></li>
+        <li><a href="#">Login</a></li>
+        </ul>
+        <div class="menu-br">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <div class="login-container">
+    <div class="login">
+      <form id="loginForm" name="CadastroLogin">
+        <p id="resultado"></p>
+        <h2>Login</h2>
+        <div class="entrada-login">
+          <input type="email" name="email" placeholder="Email" id="email" required>
+        </div>
+        <div class="entrada-login">
+          <input type="password" name="senha" placeholder="Senha" id="senha" autocomplete="current-password" required>
+        </div>
+        <div class="botao">
+          <input type="submit" class="btn" value="Login" id="btnLogin">
+        </div>
+        <div class="adicionais">
+          <span><a href="#">Esqueceu a senha ?</a></span>
+          <span><a href="cadastro.html">Inscreva-se</a></span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="/js/script-header.js"></script>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, senha)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          document.getElementById("resultado").innerText = "Login bem-sucedido!";
+          window.location.href = "dip.html"; // Redirecionar para a página principal após o login
+        })
+        .catch((error) => {
+          document.getElementById("resultado").innerText = error.message;
+        });
+    });
+  </script>
+</body>
+</html>
