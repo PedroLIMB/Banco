@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='Imagens/LOGO DIP.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="{{ url_for('index_pagina') }}">
+          <img src="{{ url_for('static', filename='Imagens/LOGO DIP.png') }}" alt="Logo Banco DIP">
+          Banco DIP
+        </a>
+      </div>
+      
+      <nav>
+        <ul class="nav-links">
+        <li><a href="{{ url_for('cadastro_pagina') }}">Sobre</a></li>
+        <li><a href="{{ url_for('cadastro_pagina') }}">Serviços</a></li>
+        <li><a href="{{ url_for('cadastro_pagina') }}">Contato</a></li>
+        <li><a href="{{ url_for('cadastro_pagina') }}">Ajuda</a></li>
+        <li><a href="{{ url_for('login_pagina') }}">Login</a></li>
+        </ul>
+        <div class="menu-br">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main class="main">
+    <div class="login-container">
+      <div class="login">
+        <form action="/processar_cadastro" method="post" id="cadastroForm" name="CadastroLogin" onsubmit="return validation()">
+          <p id="resultado">{{ message }}</p>
+          <h2>Registro</h2>
+          <div class="entrada-login">
+            <input type="text" name="nome" placeholder="Usuário" id="nome" required>
+          </div>
+          <div class="entrada-login">
+            <input type="email" name="email" placeholder="Email" id="email" required>
+          </div>
+          <div class="entrada-login">
+            <input type="password" name="senha" placeholder="Senha" id="senha" required>
+          </div>
+          <div class="entrada-login">
+            <input type="password" name="cSenha" placeholder="Confirmar senha" required>
+          </div>
+          <div class="entrada-login">
+            <input type="number" name="depositoInicial" placeholder="Saldo Inicial" required>
+          </div>
+          <div class="botao">
+            <input type="submit" class="btn" value="Registro">
+          </div>
+          <div class="adicionais">
+            <span><a href="{{ url_for('login_pagina') }}">Login</a></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script src="{{ url_for('static', filename='js/script-header.js') }}"></script>
+</body>
+</html>
