@@ -7,149 +7,215 @@
   <link rel="shortcut icon" type="image/png" href="/Imagens/LOGO DIP.ico">
   <link rel="stylesheet" href="/css/dip.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 </head>
 <body>
-
-<header class="header">
-  <div class="container">
-    <div class="logo">
-      <a href="dip.html">
-      <img src="/Imagens/LOGO DIP.png" alt="Logo Banco DIP">
-      Banco DIP
-      </a>
-    </div>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="#">Sobre</a></li>
-        <li><a href="#">Serviços</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Ajuda</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-      <div class="menu-br">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="dip.html">
+          <img src="/Imagens/LOGO DIP.png" alt="Logo Banco DIP">
+          Banco DIP
+        </a>
       </div>
-    </nav>
-  </div>
-</header>
-
-<main class="main">
-  <div class="container">
-    <div class="content">
-      <h1>Bem-vindo ao Banco DIP</h1>
-      <p>Gerencie sua vida financeira de forma simples e eficiente.</p>
-      <div class="transacao">
-        <label for="valorTransacao">Digite o Valor da Transação:</label>
-        <input type="number" id="valorTransacao" placeholder="Digite o valor...">
-        <label for="emailDestinatario">Email do Destinatário (para Transferência):</label>
-        <input type="email" id="emailDestinatario" placeholder="Digite o email do destinatário...">
-        <div class="botoes-transacao">
-          <button id="botaoDeposito">Depósito</button>
-          <button id="botaoSaque">Saque</button>
-          <button id="botaoTransferencia">Transferência</button>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Serviços</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Ajuda</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+        <div class="menu-br">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </div>
-      </div>
-      <div class="saldo">
-        <h2>Seu Saldo: <span id="saldo">R$ 0.00</span></h2>
-      </div>
-      <div class="limiteChequeEspecial">
-        <h3>Limite de Cheque Especial</h3>
-        <p>Máximo: <span id="limiteChequeEspecial">R$ 0.00</span></p>
-      </div>
-      <div id="resultado"></div>
+      </nav>
     </div>
-  </div>
-</main>
+  </header>
 
-<footer>
-  <img src="/Imagens/LOGO DIP.png" alt="Logo Banco DIP">
-  <p>2024 Banco DIP</p>
-</footer>
+  <main class="main">
+    <div class="container">
+      <div class="content">
+        <h1>Bem-vindo ao Banco DIP</h1>
+        <p>Gerencie sua vida financeira de forma simples e eficiente.</p>
+        <div class="transacao">
+          <label for="valorTransacao">Digite o Valor da Transação:</label>
+          <input type="number" id="valorTransacao" placeholder="Digite o valor...">
+          <label for="emailDestinatario">Email do Destinatário (para Transferência):</label>
+          <input type="email" id="emailDestinatario" placeholder="Digite o email do destinatário...">
+          <div class="botoes-transacao">
+            <button id="botaoDeposito">Depósito</button>
+            <button id="botaoSaque">Saque</button>
+            <button id="botaoTransferencia">Transferência</button>
+          </div>
+        </div>
+        <div class="saldo">
+          <h2>Seu Saldo: <span id="saldo">R$ 0.00</span></h2>
+        </div>
+        <div class="limiteChequeEspecial">
+          <h3>Limite de Cheque Especial</h3>
+          <p>Máximo: <span id="chequeEspecial">R$ 0.00</span></p>
+        </div>
+        <div id="resultado"></div>
+      </div>
+    </div>
+  </main>
 
-<!-- Seção do JavaScript -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-<script>
-  // Your web app's Firebase configuration
-const firebaseConfig = {
-apiKey: "AIzaSyDOqHiQ8tnsIflSOrjWZGawDN4Iock2g0s",
-authDomain: "bancodip-61293.firebaseapp.com",
-databaseURL: "https://bancodip-61293-default-rtdb.firebaseio.com",
-projectId: "bancodip-61293",
-storageBucket: "bancodip-61293.appspot.com",
-messagingSenderId: "550802117666",
-appId: "1:550802117666:web:1d5a25c1ebf621fe95667b",
-measurementId: "G-RGV9JTDSGL"
-};
+  <footer>
+    <img src="/Imagens/LOGO DIP.png" alt="Logo Banco DIP">
+    <p>2024 Banco DIP</p>
+  </footer>
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Referência ao Firestore
-const db = firebase.firestore();
-
-// Verificar se o usuário está autenticado
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // Usuário está autenticado
-    const userId = user.uid;
-
-    // Função para realizar o depósito
-    document.getElementById("botaoDeposito").addEventListener("click", () => {
-      const valorTransacao = parseFloat(document.getElementById("valorTransacao").value);
-      const saldoAtual = parseFloat(document.getElementById("saldo").textContent.replace("R$ ", ""));
-
-      const novoSaldo = saldoAtual + valorTransacao;
-
-      // Atualizar o saldo no Firestore
-      db.collection("users").doc(userId)
-        .update({
-          saldo: novoSaldo
-        })
-        .then(() => {
-          document.getElementById("saldo").textContent = `R$ ${novoSaldo.toFixed(2)}`;
-          document.getElementById("resultado").textContent = "Depósito realizado com sucesso!";
-        })
-        .catch((error) => {
-          console.error("Erro ao realizar depósito:", error);
-          document.getElementById("resultado").textContent = "Erro ao realizar depósito. Por favor, tente novamente.";
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOqHiQ8tnsIflSOrjWZGawDN4Iock2g0s",
+      authDomain: "bancodip-61293.firebaseapp.com",
+      databaseURL: "https://bancodip-61293-default-rtdb.firebaseio.com",
+      projectId: "bancodip-61293",
+      storageBucket: "bancodip-61293.appspot.com",
+      messagingSenderId: "550802117666",
+      appId: "1:550802117666:web:1d5a25c1ebf621fe95667b",
+      measurementId: "G-RGV9JTDSGL"
+    };
+  
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  
+    // Referência ao Realtime Database
+    const db = firebase.database();
+  
+    // Função para obter e atualizar o saldo do usuário
+    function atualizarSaldo(userId, valorTransacao, operacao) {
+      const userRef = db.ref('usuarios/' + userId);
+  
+      return userRef.transaction((userDoc) => {
+        if (!userDoc) {
+          userDoc = { saldo: 0, chequeEspecial: 0 };
+        }
+  
+        let saldoAtual = userDoc.saldo || 0;
+        let chequeEspecial = userDoc.chequeEspecial || 0;
+  
+        saldoAtual = parseFloat(saldoAtual);
+        valorTransacao = parseFloat(valorTransacao);
+  
+        if ((operacao === 'saque' || operacao === 'transferencia') && valorTransacao > saldoAtual + chequeEspecial) {
+          throw new Error("Saldo insuficiente para realizar a transação.");
+        }
+  
+        let novoSaldo = saldoAtual;
+        if (operacao === 'deposito') {
+          novoSaldo += valorTransacao;
+        } else if (operacao === 'saque' || operacao === 'transferencia') {
+          novoSaldo -= valorTransacao;
+        }
+  
+        userDoc.saldo = novoSaldo;
+  
+        return userDoc;
+      }).then((result) => {
+        if (result.committed) {
+          return result.snapshot.val().saldo;
+        } else {
+          throw new Error("Falha ao atualizar o saldo.");
+        }
+      });
+    }
+  
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const userId = user.uid;
+  
+        document.getElementById("botaoDeposito").addEventListener("click", () => {
+          const valorTransacao = parseFloat(document.getElementById("valorTransacao").value);
+          if (valorTransacao && valorTransacao > 0) {
+            atualizarSaldo(userId, valorTransacao, 'deposito')
+              .then((novoSaldo) => {
+                document.getElementById("resultado").innerText = `Depósito de R$ ${valorTransacao} realizado com sucesso. Novo saldo: R$ ${novoSaldo}`;
+                document.getElementById("saldo").innerText = `R$ ${novoSaldo.toFixed(2)}`;
+              })
+              .catch((error) => {
+                document.getElementById("resultado").innerText = error.message;
+              });
+          } else {
+            document.getElementById("resultado").innerText = "Valor de transação inválido.";
+          }
         });
-    });
-
-    // Função para realizar o saque
-    document.getElementById("botaoSaque").addEventListener("click", () => {
-      const valorTransacao = parseFloat(document.getElementById("valorTransacao").value);
-      const saldoAtual = parseFloat(document.getElementById("saldo").textContent.replace("R$ ", ""));
-
-      // Verificar se há saldo suficiente para o saque
-      if (valorTransacao > saldoAtual) {
-        document.getElementById("resultado").textContent = "Saldo insuficiente para realizar o saque.";
-        return;
+  
+        document.getElementById("botaoSaque").addEventListener("click", () => {
+          const valorTransacao = parseFloat(document.getElementById("valorTransacao").value);
+          if (valorTransacao && valorTransacao > 0) {
+            atualizarSaldo(userId, valorTransacao, 'saque')
+              .then((novoSaldo) => {
+                document.getElementById("resultado").innerText = `Saque de R$ ${valorTransacao} realizado com sucesso. Novo saldo: R$ ${novoSaldo}`;
+                document.getElementById("saldo").innerText = `R$ ${novoSaldo.toFixed(2)}`;
+              })
+              .catch((error) => {
+                document.getElementById("resultado").innerText = error.message;
+              });
+          } else {
+            document.getElementById("resultado").innerText = "Valor de transação inválido.";
+          }
+        });
+  
+        document.getElementById("botaoTransferencia").addEventListener("click", () => {
+          const valorTransacao = parseFloat(document.getElementById("valorTransacao").value);
+          const emailDestinatario = document.getElementById("emailDestinatario").value;
+          if (valorTransacao && valorTransacao > 0 && emailDestinatario) {
+            db.ref("usuarios").orderByChild("email").equalTo(emailDestinatario).once("value")
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  const destinatarioId = Object.keys(snapshot.val())[0];
+                  atualizarSaldo(userId, valorTransacao, 'saque')
+                    .then((novoSaldoRemetente) => {
+                      atualizarSaldo(destinatarioId, valorTransacao, 'deposito')
+                        .then((novoSaldoDestinatario) => {
+                          document.getElementById("resultado").innerText = `Transferência de R$ ${valorTransacao} para ${emailDestinatario} realizada com sucesso. Novo saldo: R$ ${novoSaldoRemetente}`;
+                          document.getElementById("saldo").innerText = `R$ ${novoSaldoRemetente.toFixed(2)}`;
+                        })
+                        .catch((error) => {
+                          // Revert the withdrawal if the deposit fails
+                          atualizarSaldo(userId, valorTransacao, 'deposito');
+                          document.getElementById("resultado").innerText = error.message;
+                        });
+                    })
+                    .catch((error) => {
+                      document.getElementById("resultado").innerText = error.message;
+                    });
+                } else {
+                  document.getElementById("resultado").innerText = `Destinatário com email ${emailDestinatario} não encontrado.`;
+                }
+              })
+              .catch((error) => {
+                document.getElementById("resultado").innerText = error.message;
+              });
+          } else {
+            document.getElementById("resultado").innerText = "Valor de transação ou email inválido.";
+          }
+        });
+  
+        const userDocRef = db.ref('usuarios/' + userId);
+        userDocRef.on('value', (snapshot) => {
+          if (snapshot.exists()) {
+            const userDoc = snapshot.val();
+            const saldo = userDoc.saldo || 0;
+            const chequeEspecial = userDoc.chequeEspecial || 0;
+            document.getElementById("saldo").innerText = `R$ ${saldo.toFixed(2)}`;
+            document.getElementById("chequeEspecial").innerText = `R$ ${chequeEspecial.toFixed(2)}`;
+          }
+        });
+      } else {
+        window.location.href = "login.html";
       }
-
-      const novoSaldo = saldoAtual - valorTransacao;
-
-      // Atualizar o saldo no Firestore
-      db.collection("users").doc(userId)
-        .update({
-          saldo: novoSaldo
-        })
-        .then(() => {
-          document.getElementById("saldo").textContent = `R$ ${novoSaldo.toFixed(2)}`;
-          document.getElementById("resultado").textContent = "Saque realizado com sucesso!";
-        })
-        .catch((error) => {
-          console.error("Erro ao realizar saque:", error);
-          document.getElementById("resultado").textContent = "Erro ao realizar saque. Por favor, tente novamente.";
-        });
     });
-  }
-});
-
-</script>
+  </script>
+  
+  
 </body>
 </html>
 

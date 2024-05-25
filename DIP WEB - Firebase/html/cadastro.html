@@ -10,23 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-        apiKey: "AIzaSyDOqHiQ8tnsIflSOrjWZGawDN4Iock2g0s",
-        authDomain: "bancodip-61293.firebaseapp.com",
-        databaseURL: "https://bancodip-61293-default-rtdb.firebaseio.com",
-        projectId: "bancodip-61293",
-        storageBucket: "bancodip-61293.appspot.com",
-        messagingSenderId: "550802117666",
-        appId: "1:550802117666:web:1d5a25c1ebf621fe95667b",
-        measurementId: "G-RGV9JTDSGL"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
 <body>
   <header class="header">
@@ -57,7 +41,7 @@
     <div class="login-container">
       <div class="login">
         <form action="/processar_cadastro" method="post" id="cadastroForm" name="CadastroLogin">
-          <p id="resultado"></p>
+          <p id="mensagemErro"></p>
           <h2>Registro</h2>
           <div class="entrada-login">
             <input type="text" name="nome" placeholder="Usuário" id="nome" required>
@@ -84,33 +68,74 @@
       </div>
     </div>
   </main>
-  <script src="/js/script-header.js"></script>
+
   <script>
-    document.getElementById("cadastroForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOqHiQ8tnsIflSOrjWZGawDN4Iock2g0s",
+      authDomain: "bancodip-61293.firebaseapp.com",
+      databaseURL: "https://bancodip-61293-default-rtdb.firebaseio.com",
+      projectId: "bancodip-61293",
+      storageBucket: "bancodip-61293.appspot.com",
+      messagingSenderId: "550802117666",
+      appId: "1:550802117666:web:1d5a25c1ebf621fe95667b",
+      measurementId: "G-RGV9JTDSGL"
+    };
+  
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  
+    // Referência ao Realtime Database
+    const db = firebase.database();
+  
+    // Função para exibir mensagens de erro
+    function exibirMensagemErro(mensagem) {
+      const mensagemErro = document.getElementById("mensagemErro");
+      mensagemErro.innerText = mensagem;
+    }
+  
+    // Ouvinte de evento para o formulário de cadastro
+    document.getElementById("cadastroForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+  
       const nome = document.getElementById("nome").value;
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
-      const cSenha = document.getElementById("cSenha").value; // Corrigido
-      const depositoInicial = document.getElementById("depositoInicial").value;
-
-      // Aqui você pode adicionar lógica adicional de validação, se necessário
-
+      const confirmarSenha = document.getElementById("cSenha").value;
+      const saldoInicial = parseFloat(document.getElementById("depositoInicial").value);
+  
+      if (!nome || !email || !senha || !confirmarSenha || isNaN(saldoInicial)) {
+        exibirMensagemErro("Todos os campos são obrigatórios e devem ser preenchidos corretamente.");
+        return;
+      }
+  
+      if (senha !== confirmarSenha) {
+        exibirMensagemErro("As senhas não coincidem.");
+        return;
+      }
+  
+      // Cálculo do cheque especial como 4 vezes o valor do depósito inicial
+      const chequeEspecial = saldoInicial * 4;
+  
+      // Criação do usuário com e-mail e senha no Firebase Authentication
       firebase.auth().createUserWithEmailAndPassword(email, senha)
         .then((userCredential) => {
           const user = userCredential.user;
-          return firebase.firestore().collection("users").doc(user.uid).set({
+  
+          // Adição dos dados do usuário no Realtime Database
+          return db.ref("usuarios/" + user.uid).set({
             nome: nome,
             email: email,
-            saldo: depositoInicial
+            saldo: saldoInicial,
+            chequeEspecial: chequeEspecial
           });
         })
         .then(() => {
-          document.getElementById("resultado").innerText = "Usuário cadastrado com sucesso!";
-          window.location.href = "login.html"; // Redirecionar para a página principal após o login
+          // Redirecionar para a página principal após cadastro bem-sucedido
+          window.location.href = "dip.html";
         })
         .catch((error) => {
-          document.getElementById("resultado").innerText = error.message;
+          exibirMensagemErro(error.message);
         });
     });
   </script>
