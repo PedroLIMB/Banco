@@ -3,29 +3,9 @@ from PIL import Image
 import os
 import requests
 import json
-from tkinter import CENTER, simpledialog
 
-linkFirebase = 'https://bancodip-cb201-default-rtdb.firebaseio.com/'
+linkFirebase = 'https://bancodip-61293-default-rtdb.firebaseio.com/'
 
-# dados = {'nome': 'pedro', 'email': 'pedro@gmail.com', 'senha': '12', 'saldo': '1000', 'cheque_especial': '4000'}
-# inserirDados = requests.post('{}.json'.format(linkFirebase), json.dumps(dados))
-# print(inserirDados)
-#print(inserirDados.text)
-
-
-# dados = {'nome': 'bluezão'}
-# inserirDados = requests.patch('{}usuario/-NyfQ3u3U71FOawOTN7r/.json'.format(linkFirebase), json.dumps(dados))
-# print(inserirDados)
-# print(inserirDados.text)
-
-
-# dados = {'nome': 'pedro', 'email': 'pedro@gmail.com', 'senha': '12', 'saldo': '1000', 'cheque_especial': '4000'}
-# inserirDados = requests.get('{}.json'.format(linkFirebase), json.dumps(dados))
-# print(inserirDados)
-# print(inserirDados.text)
-
-
-# Classe para representar uma conta
 class Conta:
     def __init__(self, id, titular, email, senha, saldo, cheque_especial):
         self.id = id
@@ -40,18 +20,12 @@ class Conta:
 
     def sacar(self, valor):
         if self.saldo + self.cheque_especial >= valor:
-            if self.saldo >= valor:
-                self.saldo -= valor
-            else:
-                valor_excedente = valor - self.saldo
-                self.saldo = 0
-                self.cheque_especial -= valor_excedente
+            self.saldo -= valor
         else:
             print("Saldo insuficiente.")
 
     def consultar_saldo(self):
         return self.saldo, self.cheque_especial
-
 
 class Banco:
     @staticmethod
@@ -61,16 +35,16 @@ class Banco:
         usuarioGet = usuario.get()
         emailGet = email.get()
         senhaGet = senha.get()
-        saldoGet = saldoinicial.get()
+        saldoGet = float(saldoinicial.get())
 
-        if float(saldoGet) <= 0:
-            print("Passa o dinheiro e faz o L")
+        if saldoGet <= 0:
+            print("Saldo inicial deve ser maior que zero.")
         else:
             usuarios['nome'] = usuarioGet
             usuarios['email'] = emailGet
             usuarios['senha'] = senhaGet
             usuarios['saldo'] = saldoGet
-            usuarios['cheque_especial'] = float(saldoGet) * 4
+            usuarios['cheque_especial'] = saldoGet * 4
             inserirDados = requests.post('{}/usuario/.json'.format(linkFirebase), json.dumps(usuarios))
             print(inserirDados)
             print(inserirDados.text)
@@ -81,9 +55,9 @@ class Banco:
         senhaGet = senha_login.get()
 
         pegarValores = requests.get('{}/usuario/.json'.format(linkFirebase))
-        print(pegarValores)
         pegarValoresDic = pegarValores.json()
 
+        global id_usuario
         for id_usuario in pegarValoresDic:
             email_db = pegarValoresDic[id_usuario]['email']
             senha_db = pegarValoresDic[id_usuario]['senha']
@@ -96,8 +70,88 @@ class Banco:
                 return
         print("Email ou senha incorretos")
 
+    @staticmethod
+    def saque():
+        valor_saque = float(valor.get())
+        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        usuario = pegarValores.json()
 
-# Classe para a interface do usuário
+        saldo_db = float(usuario['saldo'])
+        cheque_especial_db = float(usuario['cheque_especial'])
+
+        if saldo_db + cheque_especial_db >= valor_saque:
+            saldo_db -= valor_saque
+
+            dados = {'saldo': saldo_db}
+            requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
+            print(f'Saque de {valor_saque} realizado com sucesso.')
+        else:
+            print("Saldo insuficiente.")
+
+    @staticmethod
+    def deposito():
+        valor_deposito = float(valor.get())
+        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        usuario = pegarValores.json()
+
+        saldo_db = float(usuario['saldo'])
+
+        saldo_db += valor_deposito
+
+        dados = {'saldo': saldo_db}
+        requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
+        print(f'Depósito de {valor_deposito} realizado com sucesso.')
+
+    @staticmethod
+    def transferencia():
+        email_destino = email_transferencia.get()
+        valor_transferencia = float(valor.get())
+
+        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        remetente = pegarValores.json()
+
+        saldo_remetente = float(remetente['saldo'])
+        cheque_especial_remetente = float(remetente['cheque_especial'])
+
+        if saldo_remetente + cheque_especial_remetente >= valor_transferencia:
+            pegarValoresTodos = requests.get('{}/usuario/.json'.format(linkFirebase))
+            pegarValoresDic = pegarValoresTodos.json()
+
+            id_destino = None
+            for id_usuario_destino in pegarValoresDic:
+                if pegarValoresDic[id_usuario_destino]['email'] == email_destino:
+                    id_destino = id_usuario_destino
+                    break
+
+            if id_destino:
+                pegarValoresDestino = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_destino))
+                destinatario = pegarValoresDestino.json()
+
+                saldo_destinatario = float(destinatario['saldo'])
+
+                saldo_remetente -= valor_transferencia
+
+                dados_remetente = {'saldo': saldo_remetente}
+                requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados_remetente))
+
+                saldo_destinatario += valor_transferencia
+                dados_destinatario = {'saldo': saldo_destinatario}
+                requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_destino), json.dumps(dados_destinatario))
+
+                print(f'Transferência de {valor_transferencia} realizada com sucesso para {email_destino}.')
+            else:
+                print("Destinatário não encontrado.")
+        else:
+            print("Saldo insuficiente.")
+
+    @staticmethod
+    def consultar_dados_usuario():
+        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        usuario = pegarValores.json()
+        saldo_db = float(usuario['saldo'])
+        cheque_especial_db = float(usuario['cheque_especial'])
+        return saldo_db, cheque_especial_db
+
 class Interface:
     @staticmethod
     def tela_login():
@@ -105,11 +159,9 @@ class Interface:
         janela_login.geometry("700x400")
         janela_login.title("BancoDIP")
 
-        # Customizando janela no geral
         direito = customtkinter.CTkFrame(master=janela_login, width=340, height=400, fg_color="#192042")
         direito.place(x=360, y=0)
 
-        # Adição de elementos
         logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
         imagem = customtkinter.CTkImage(light_image=Image.open(logo))
         label_logo = customtkinter.CTkLabel(master=direito, image=imagem, text="")
@@ -119,7 +171,6 @@ class Interface:
         senha_login = customtkinter.CTkEntry(janela_login, placeholder_text="Senha", show="*")
         login_button = customtkinter.CTkButton(janela_login, text="Login", command=Banco.login)
 
-        # Customização dos elementos
         label_logo.place(x=-87, y=-45)
         imagem.configure(size=(500, 500))
 
@@ -137,30 +188,25 @@ class Interface:
     @staticmethod
     def tela_cadastro():
         def janela_cadastro():
-            # Criando janela de cadastro
             janela_cadastro = customtkinter.CTkToplevel()
             janela_cadastro.geometry("700x400")
             janela_cadastro.title("BancoDIP")
 
-            # Customizando janela no geral
             direito = customtkinter.CTkFrame(master=janela_cadastro, width=340, height=400, fg_color="#192042")
             direito.place(x=360, y=0)
 
-            # Adição de elementos
             logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
             imagem = customtkinter.CTkImage(light_image=Image.open(logo))
             label_logo = customtkinter.CTkLabel(master=direito, image=imagem, text="")
             nomebanco = customtkinter.CTkLabel(janela_cadastro, text="Banco DIP")
-            global usuario, email, senha, confirmarsenha, saldoinicial
-            usuario = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Usuario")
+
+            global usuario, email, senha, saldoinicial
+            usuario = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Nome")
             email = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Email")
             senha = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Senha", show="*")
-            confirmarsenha = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Confirmar Senha", show="*")
-            saldoinicial = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Insira um saldo inicial")
-            cadastrar_button = customtkinter.CTkButton(janela_cadastro, text="Registrar-se", command=Banco.registrar)
-            login_button = customtkinter.CTkButton(janela_cadastro, text="Fazer Login", command=Interface.tela_login)
+            saldoinicial = customtkinter.CTkEntry(janela_cadastro, placeholder_text="Saldo Inicial")
+            registrar = customtkinter.CTkButton(janela_cadastro, text="Registrar", command=Banco.registrar)
 
-            # Customização dos elementos
             label_logo.place(x=-87, y=-45)
             imagem.configure(size=(500, 500))
 
@@ -169,106 +215,110 @@ class Interface:
 
             usuario.place(x=40, y=150)
             usuario.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
+
             email.place(x=40, y=200)
             email.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
+
             senha.place(x=40, y=250)
             senha.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-            confirmarsenha.place(x=40, y=300)
-            confirmarsenha.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-            saldoinicial.place(x=40, y=350)
+            
+            saldoinicial.place(x=40, y=300)
             saldoinicial.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-            cadastrar_button.place(x=40, y=400)
-            cadastrar_button.configure(font=("Roboto", 16), width=300, height=38, fg_color="#192042")
 
-            login_button.place(x=40, y=450)
-            login_button.configure(font=("Roboto", 14), width=300, height=38, fg_color="#192042")
+            registrar.place(x=40, y=350)
+            registrar.configure(font=("Roboto", 16), width=300, height=38, fg_color="#192042")
 
-        janela_cadastro()
+        janela_inicial = customtkinter.CTk()
+        janela_inicial.geometry("700x400")
+        janela_inicial.title("BancoDIP")
 
-    @staticmethod
-    def janela_principal(usuario):
-        # Criando janela principal
-        janela_principal = customtkinter.CTkToplevel()
-        janela_principal.geometry("1000x650")
-        janela_principal.title("BancoDIP")
+        esquerdo = customtkinter.CTkFrame(master=janela_inicial, width=340, height=400, fg_color="#192042")
+        esquerdo.place(x=0, y=0)
 
-        # Customizando janela no geral
-        header = customtkinter.CTkFrame(master=janela_principal, width=1000, height=200, fg_color="white")
-        header.place(x=0, y=0)
-        frame_info = customtkinter.CTkFrame(master=janela_principal, width=1000, height=100, fg_color="#192042")
-        frame_info.place(x=0, y=200)
-        frame_transacoes = customtkinter.CTkFrame(master=janela_principal, width=1000, height=300, fg_color="#192042")
-        frame_transacoes.place(x=0, y=300)
-
-        # Adição de elementos
         logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
         imagem = customtkinter.CTkImage(light_image=Image.open(logo))
-        label_logo = customtkinter.CTkLabel(master=header, image=imagem, text="")
-        texto_info = customtkinter.CTkLabel(master=frame_info, text=f"Olá, {usuario[1]}!\nSaldo Disponível: R${usuario[4]:.2f}\nCheque Especial: R${usuario[5]:.2f}")
+        label_logo = customtkinter.CTkLabel(master=esquerdo, image=imagem, text="")
+        nomebanco = customtkinter.CTkLabel(janela_inicial, text="Banco DIP")
+        registrar = customtkinter.CTkButton(janela_inicial, text="Cadastrar-se", command=janela_cadastro)
+        login = customtkinter.CTkButton(janela_inicial, text="Login", command=Interface.tela_login)
 
-        # Botões de transações
-        botao_saque = customtkinter.CTkButton(master=frame_transacoes, text="Saque", command=lambda: Interface.realizar_operacao("saque", usuario))
-        botao_deposito = customtkinter.CTkButton(master=frame_transacoes, text="Depósito", command=lambda: Interface.realizar_operacao("deposito", usuario))
-        botao_transferencia = customtkinter.CTkButton(master=frame_transacoes, text="Transferência", command=lambda: Interface.realizar_operacao("transferencia", usuario))
+        label_logo.place(x=-87, y=-45)
+        imagem.configure(size=(500, 500))
 
-        # Customização dos elementos
-        label_logo.place(relx=0.5, rely=0.5, anchor=CENTER)
-        imagem.configure(size=(300, 300))
+        nomebanco.place(x=475, y=100)
+        nomebanco.configure(font=("Roboto", 22, "bold"))
 
-        texto_info.configure(font=("Roboto", 20), text_color="white")
-        texto_info.place(relx=0.5, rely=0.5, anchor=CENTER)
+        registrar.place(x=440, y=180)
+        registrar.configure(font=("Roboto", 16), width=180, height=38, fg_color="#192042")
 
-        botao_saque.configure(font=("Roboto", 18), text_color="#192042", fg_color="white")
-        botao_saque.place(relx=0.25, rely=0.5, anchor=CENTER)
+        login.place(x=440, y=230)
+        login.configure(font=("Roboto", 16), width=180, height=38, fg_color="#192042")
 
-        botao_deposito.configure(font=("Roboto", 18), text_color="#192042", fg_color="white")
-        botao_deposito.place(relx=0.5, rely=0.5, anchor=CENTER)
+        janela_inicial.mainloop()
 
-        botao_transferencia.configure(font=("Roboto", 18), text_color="#192042", fg_color="white")
-        botao_transferencia.place(relx=0.75, rely=0.5, anchor=CENTER)
+    @staticmethod
+    def janela_principal(usuario_info):
+        global id_usuario, usuario
+        id_usuario, nome, email, senha, saldo, cheque_especial = usuario_info
+        usuario = Conta(id_usuario, nome, email, senha, saldo, cheque_especial)
 
+        janela_principal = customtkinter.CTk()
+        janela_principal.geometry("700x400")
+        janela_principal.title("BancoDIP")
 
-# Criar janela principal
-janela = customtkinter.CTk()
-janela.geometry("700x400")
-janela.title("BancoDIP")
+        frame = customtkinter.CTkFrame(master=janela_principal, width=680, height=380)
+        frame.place(x=10, y=10)
 
-# Customizando janela no geral
-customtkinter.set_appearance_mode('Light')
-esquerdo = customtkinter.CTkFrame(master=janela, width=340, height=400, fg_color="#192042")
-esquerdo.place(x=-10, y=0)
+        label_bem_vindo = customtkinter.CTkLabel(master=frame, text=f"Bem-vindo, {nome}!", font=("Roboto", 22, "bold"))
+        label_bem_vindo.place(x=10, y=10)
 
-# Adição de elementos
-logo = os.path.join(os.path.dirname(__file__), 'Logo/Logo.png')
-imagem = customtkinter.CTkImage(light_image=Image.open(logo))
-label_logo = customtkinter.CTkLabel(master=esquerdo, image=imagem, text="")
-nomebanco = customtkinter.CTkLabel(janela, text="Banco DIP")
-usuario = customtkinter.CTkEntry(janela, placeholder_text="Usuario")
-email = customtkinter.CTkEntry(janela, placeholder_text="Email")
-senha = customtkinter.CTkEntry(janela, placeholder_text="Senha", show="*")
-confirmarsenha = customtkinter.CTkEntry(janela, placeholder_text="Confirmar Senha", show="*")
-saldoinicial = customtkinter.CTkEntry(janela, placeholder_text="Insira um saldo inicial")
-cadastrar = customtkinter.CTkButton(janela, text="Registrar-se", command=Banco.registrar)
-login = customtkinter.CTkButton(janela, text="Fazer Login", command=Interface.tela_login)
+        global valor, email_transferencia
+        valor = customtkinter.CTkEntry(master=frame, placeholder_text="Valor")
+        email_transferencia = customtkinter.CTkEntry(master=frame, placeholder_text="Email do Destinatário")
 
-# Customização dos elementos
-label_logo.place(x=-87, y=-45)
-imagem.configure(size=(500, 500))
-nomebanco.place(x=465, y=15)
-nomebanco.configure(font=("Roboto", 22, "bold"))
-usuario.place(x=370, y=60)
-usuario.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-email.place(x=370, y=110)
-email.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-senha.place(x=370, y=160)
-senha.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-confirmarsenha.place(x=370, y=210)
-confirmarsenha.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-saldoinicial.place(x=370, y=260)
-saldoinicial.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
-cadastrar.place(x=370, y=310)
-cadastrar.configure(font=("Roboto", 16), width=300, height=38, fg_color="#192042")
-login.place(x=370, y=350)
-login.configure(font=("Roboto", 14), width=300, height=38, fg_color="#192042")
+        valor.place(x=10, y=50)
+        valor.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
+        email_transferencia.place(x=10, y=100)
+        email_transferencia.configure(font=("Roboto", 16), width=300, height=38, border_width=0)
 
-janela.mainloop()
+        botao_saque = customtkinter.CTkButton(master=frame, text="Sacar", command=Banco.saque)
+        botao_deposito = customtkinter.CTkButton(master=frame, text="Depositar", command=Banco.deposito)
+        botao_transferencia = customtkinter.CTkButton(master=frame, text="Transferir", command=Banco.transferencia)
+        botao_consultar = customtkinter.CTkButton(master=frame, text="Consultar Saldo", command=Interface.consultar_saldo)
+
+        botao_saque.place(x=10, y=150)
+        botao_saque.configure(font=("Roboto", 16), width=140, height=38, fg_color="#192042")
+
+        botao_deposito.place(x        =160, y=150)
+        botao_deposito.configure(font=("Roboto", 16), width=140, height=38, fg_color="#192042")
+
+        botao_transferencia.place(x=10, y=200)
+        botao_transferencia.configure(font=("Roboto", 16), width=140, height=38, fg_color="#192042")
+
+        botao_consultar.place(x=160, y=200)
+        botao_consultar.configure(font=("Roboto", 16), width=140, height=38, fg_color="#192042")
+
+        # Exibição do saldo e cheque especial
+        label_saldo = customtkinter.CTkLabel(master=frame, text=f"Saldo: {saldo}", font=("Roboto", 16))
+        label_cheque_especial = customtkinter.CTkLabel(master=frame, text=f"Cheque Especial: {cheque_especial}", font=("Roboto", 16))
+        label_saldo.place(x=10, y=250)
+        label_cheque_especial.place(x=10, y=280)
+
+        def atualizar_saldo_cheque_especial():
+            saldo, cheque_especial = Banco.consultar_dados_usuario()
+            label_saldo.configure(text=f"Saldo: {saldo}")
+            label_cheque_especial.configure(text=f"Cheque Especial: {cheque_especial}")
+            label_saldo.after(1000, atualizar_saldo_cheque_especial)  # Atualiza a cada segundo
+
+        atualizar_saldo_cheque_especial()  # Chama a função para iniciar a atualização automática
+
+        janela_principal.mainloop()
+
+    @staticmethod
+    def consultar_saldo():
+        saldo, cheque_especial = Banco.consultar_dados_usuario()
+        print(f'Saldo: {saldo}')
+        print(f'Cheque Especial: {cheque_especial}')
+
+if __name__ == "__main__":
+    Interface.tela_cadastro()
