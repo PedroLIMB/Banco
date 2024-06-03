@@ -45,7 +45,7 @@ class Banco:
             usuarios['senha'] = senhaGet
             usuarios['saldo'] = saldoGet
             usuarios['cheque_especial'] = saldoGet * 4
-            inserirDados = requests.post('{}/usuario/.json'.format(linkFirebase), json.dumps(usuarios))
+            inserirDados = requests.post('{}/usuarios/.json'.format(linkFirebase), json.dumps(usuarios))
             print(inserirDados)
             print(inserirDados.text)
 
@@ -54,7 +54,7 @@ class Banco:
         emailGet = email_login.get()
         senhaGet = senha_login.get()
 
-        pegarValores = requests.get('{}/usuario/.json'.format(linkFirebase))
+        pegarValores = requests.get('{}/usuarios/.json'.format(linkFirebase))
         pegarValoresDic = pegarValores.json()
 
         global id_usuario
@@ -73,7 +73,7 @@ class Banco:
     @staticmethod
     def saque():
         valor_saque = float(valor.get())
-        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        pegarValores = requests.get('{}/usuarios/{}.json'.format(linkFirebase, id_usuario))
         usuario = pegarValores.json()
 
         saldo_db = float(usuario['saldo'])
@@ -83,7 +83,7 @@ class Banco:
             saldo_db -= valor_saque
 
             dados = {'saldo': saldo_db}
-            requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
+            requests.patch('{}/usuarios/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
             print(f'Saque de {valor_saque} realizado com sucesso.')
         else:
             print("Saldo insuficiente.")
@@ -91,7 +91,7 @@ class Banco:
     @staticmethod
     def deposito():
         valor_deposito = float(valor.get())
-        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        pegarValores = requests.get('{}/usuarios/{}.json'.format(linkFirebase, id_usuario))
         usuario = pegarValores.json()
 
         saldo_db = float(usuario['saldo'])
@@ -99,7 +99,7 @@ class Banco:
         saldo_db += valor_deposito
 
         dados = {'saldo': saldo_db}
-        requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
+        requests.patch('{}/usuarios/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados))
         print(f'Depósito de {valor_deposito} realizado com sucesso.')
 
     @staticmethod
@@ -107,14 +107,14 @@ class Banco:
         email_destino = email_transferencia.get()
         valor_transferencia = float(valor.get())
 
-        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        pegarValores = requests.get('{}/usuarios/{}.json'.format(linkFirebase, id_usuario))
         remetente = pegarValores.json()
 
         saldo_remetente = float(remetente['saldo'])
         cheque_especial_remetente = float(remetente['cheque_especial'])
 
         if saldo_remetente + cheque_especial_remetente >= valor_transferencia:
-            pegarValoresTodos = requests.get('{}/usuario/.json'.format(linkFirebase))
+            pegarValoresTodos = requests.get('{}/usuarios/.json'.format(linkFirebase))
             pegarValoresDic = pegarValoresTodos.json()
 
             id_destino = None
@@ -124,7 +124,7 @@ class Banco:
                     break
 
             if id_destino:
-                pegarValoresDestino = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_destino))
+                pegarValoresDestino = requests.get('{}/usuarios/{}.json'.format(linkFirebase, id_destino))
                 destinatario = pegarValoresDestino.json()
 
                 saldo_destinatario = float(destinatario['saldo'])
@@ -132,11 +132,11 @@ class Banco:
                 saldo_remetente -= valor_transferencia
 
                 dados_remetente = {'saldo': saldo_remetente}
-                requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados_remetente))
+                requests.patch('{}/usuarios/{}/.json'.format(linkFirebase, id_usuario), json.dumps(dados_remetente))
 
                 saldo_destinatario += valor_transferencia
                 dados_destinatario = {'saldo': saldo_destinatario}
-                requests.patch('{}/usuario/{}/.json'.format(linkFirebase, id_destino), json.dumps(dados_destinatario))
+                requests.patch('{}/usuarios/{}/.json'.format(linkFirebase, id_destino), json.dumps(dados_destinatario))
 
                 print(f'Transferência de {valor_transferencia} realizada com sucesso para {email_destino}.')
             else:
@@ -146,7 +146,7 @@ class Banco:
 
     @staticmethod
     def consultar_dados_usuario():
-        pegarValores = requests.get('{}/usuario/{}.json'.format(linkFirebase, id_usuario))
+        pegarValores = requests.get('{}/usuarios/{}.json'.format(linkFirebase, id_usuario))
         usuario = pegarValores.json()
         saldo_db = float(usuario['saldo'])
         cheque_especial_db = float(usuario['cheque_especial'])
